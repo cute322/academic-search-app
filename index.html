@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-lang-key="appTitle">مساعد البحث الأكاديمي</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body class="light-theme">
+
+    <header>
+        <nav class="container">
+            <div class="logo" data-lang-key="appTitle">مساعد البحث الأكاديمي</div>
+            <div class="nav-links">
+                <button id="nav-main" class="nav-btn active" data-lang-key="navMain">الرئيسية</button>
+                <button id="nav-history" class="nav-btn" data-lang-key="navHistory">السجلّ</button>
+                <button id="nav-favorites" class="nav-btn" data-lang-key="navFavorites">المفضلة</button>
+                <button id="nav-settings" class="nav-btn" data-lang-key="navSettings">الإعدادات</button>
+            </div>
+            <div class="language-switcher">
+                <select id="lang-select">
+                    <option value="ar">العربية</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="main-screen" class="screen active">
+            <div class="container">
+                <div class="search-engine-selector card">
+                    <label for="search-engine" data-lang-key="searchEngineLabel">اختر محرك البحث:</label>
+                    <select id="search-engine">
+                        <option value="https://scholar.google.com/scholar?q=" data-name="Google Scholar">Google Scholar</option>
+                        <option value="https://www.google.com/search?q=" data-name="Google">Google (Standard)</option>
+                        <option value="https://pubmed.ncbi.nlm.nih.gov/?term=" data-name="PubMed">PubMed</option>
+                        <option value="https://ieeexplore.ieee.org/search/searchresult.jsp?queryText=" data-name="IEEE Xplore">IEEE Xplore</option>
+                        <option value="https://www.semanticscholar.org/search?q=" data-name="Semantic Scholar">Semantic Scholar</option>
+                        <option value="https://www.jstor.org/action/doBasicSearch?Query=" data-name="JSTOR">JSTOR</option>
+                        <option value="https://www.sciencedirect.com/search?qs=" data-name="ScienceDirect">ScienceDirect</option>
+                        <option value="https://www.google.com/search?tbm=bks&q=" data-name="Google Books">Google Books</option>
+                        <option value="https://patents.google.com/?q=" data-name="Google Patents">Google Patents</option>
+                    </select>
+                </div>
+
+                <div class="query-builder-grid">
+                    <div class="search-box card">
+                        <input type="text" id="main-input" data-lang-key="mainInputPlaceholder" placeholder="اكتب الكلمات المفتاحية الأساسية هنا...">
+                        <div class="command-buttons">
+                            <button class="command-btn" data-command="site" data-lang-key="cmdSite">البحث داخل موقع</button>
+                            <button class="command-btn" data-command="filetype" data-lang-key="cmdFiletype">تحديد نوع الملف</button>
+                            <button class="command-btn" data-command="exclude" data-lang-key="cmdExclude">استبعاد كلمة</button>
+                            <button class="command-btn" data-command="exact" data-lang-key="cmdExact">بحث مطابق</button>
+                            <button class="command-btn" data-command="intitle" data-lang-key="cmdIntitle">كلمة في العنوان</button>
+                        </div>
+                    </div>
+
+                    <div class="query-preview-container card">
+                        <h3 data-lang-key="queryPreviewTitle">الاستعلام النهائي:</h3>
+                        <p id="preview-explanation" data-lang-key="queryPreviewPlaceholder">لم تقم بتكوين أي استعلام بعد.</p>
+                        
+                        <h3 data-lang-key="finalUrlTitle">رابط البحث:</h3>
+                        <div class="url-box">
+                            <input type="text" id="final-url" readonly>
+                            <button id="copy-url-btn" data-lang-key="copyBtn">نسخ</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button id="search-now-btn" class="primary-btn" data-lang-key="searchNowBtn">ابحث الآن</button>
+                    <button id="add-to-favorites-btn" data-lang-key="addToFavoritesBtn">أضف للمفضلة</button>
+                    <button id="reset-query-btn" data-lang-key="resetQueryBtn">إعادة تعيين</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="history-screen" class="screen">
+            <div class="container">
+                <h2 data-lang-key="historyTitle">سجلّ البحث</h2>
+                <div id="history-list" class="data-list"></div>
+            </div>
+        </section>
+
+        <section id="favorites-screen" class="screen">
+            <div class="container">
+                <h2 data-lang-key="favoritesTitle">الاستعلامات المفضلة</h2>
+                <div id="favorites-list" class="data-list"></div>
+            </div>
+        </section>
+
+        <section id="settings-screen" class="screen">
+            <div class="container">
+                <h2 data-lang-key="settingsTitle">الإعدادات</h2>
+                <div class="setting-item card">
+                    <p data-lang-key="themeSetting">تغيير المظهر
+                    </p>
+                    <button id="toggle-theme-btn" data-lang-key="toggleThemeBtnKey">التبديل إلى الوضع المظلم</button>
+                </div>
+                <div class="setting-item card">
+                    <p data-lang-key="clearHistorySetting">مسح سجل البحث</p>
+                    <button id="clear-history-btn" class="danger-btn" data-lang-key="clearHistoryBtn">مسح السجلّ</button>
+                </div>
+                <div class="setting-item card">
+                    <p data-lang-key="exportDataSetting">تصدير البيانات</p>
+                    <div>
+                        <button id="export-json-btn" data-lang-key="exportJsonBtn">تصدير إلى JSON</button>
+                        <button id="export-csv-btn" data-lang-key="exportCsvBtn">تصدير إلى CSV</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="dev-info">
+                    <h4>للتواصل مع المطورة</h4>
+                    <p><strong>الاسم:</strong> دليلة شريف سليمان</p>
+                    <p><strong>البريد الإلكتروني:</strong> <a href="mailto:barmajawebb@gmail.com">barmajawebb@gmail.com</a></p>
+                    <p><strong>الصفحة:</strong> <a href="https://www.facebook.com/share/1B3sVo5ReG/" target="_blank" rel="noopener noreferrer">Barmaja on Facebook</a></p>
+                </div>
+                <div class="legal-info">
+                    <h4>الحقوق والأمان</h4>
+                    <p>هذا الموقع محمي بموجب حقوق الملكية الفكرية وهو ملكية خاصة للمطورة. لا يحق نسخ، تعديل، أو استخدام الكود البرمجي والتصميم لأي غرض كان دون إذن خطي مسبق.</p>
+                    <p class="privacy-terms">شروط الاستخدام - سياسة الخصوصية</p>
+                </div>
+            </div>
+            <div class="copyright-info">
+                <p>© 2025 Dalila Cherif Slimane - جميع الحقوق محفوظة.</p>
+                <p>الإصدار 1.0 (تاريخ الإصدار: سبتمبر 2025)</p>
+            </div>
+        </div>
+    </footer>
+
+    <div id="command-modal" class="modal">
+        <div class="modal-content card">
+            <span class="close-btn">&times;</span>
+            <h3 id="modal-title"></h3>
+            <div id="modal-predefined-choices"></div>
+            <input type="text" id="modal-input" placeholder="أو اكتب قيمة مخصصة هنا...">
+            <button id="modal-save-btn" class="primary-btn" data-lang-key="saveBtn">حفظ</button>
+        </div>
+    </div>
+    
+    <div id="favorite-name-modal" class="modal">
+        <div class="modal-content card">
+            <span class="close-btn">&times;</span>
+            <h3 data-lang-key="saveToFavoritesTitle">حفظ في المفضلة</h3>
+            <input type="text" id="favorite-name-input" data-lang-key="favoriteNamePlaceholder" placeholder="أدخل اسمًا للاستعلام...">
+            <button id="save-favorite-btn" class="primary-btn" data-lang-key="saveBtn">حفظ</button>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-firestore.js"></script>
+    <script src="firebase/firebase-config.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
