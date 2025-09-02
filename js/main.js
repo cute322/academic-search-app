@@ -28,45 +28,122 @@ document.addEventListener('DOMContentLoaded', () => {
     const exportJsonBtn = document.getElementById('export-json-btn');
     const exportCsvBtn = document.getElementById('export-csv-btn');
     
-    let queryState = { keywords: '', site: '', filetype: '', exclude: '', exact: '', intitle: '' };
-    let currentCommand = '';
+   let queryState = { keywords: '', site: '', filetype: '', exclude: '', exact: '', intitle: '', intext: '', allintext: '', anyintext: '', daterange: '' };
+   let currentCommand = '';
 
     // --- 2. نظام تغيير اللغة (Internationalization) ---
     const locales = {
-        ar: {
-            appTitle: "مساعد البحث الأكاديمي", navMain: "الرئيسية", navHistory: "السجلّ", navFavorites: "المفضلة", navSettings: "الإعدادات",
-            searchEngineLabel: "اختر محرك البحث:", mainInputPlaceholder: "اكتب الكلمات المفتاحية الأساسية هنا...",
-            cmdSite: "البحث داخل موقع", cmdFiletype: "تحديد نوع الملف", cmdExclude: "استبعاد كلمة", cmdExact: "بحث مطابق", cmdIntitle: "كلمة في العنوان",
-            queryPreviewTitle: "الاستعلام النهائي:", queryPreviewPlaceholder: "لم تقم بتكوين أي استعلام بعد.",
-            finalUrlTitle: "رابط البحث:", copyBtn: "نسخ", searchNowBtn: "ابحث الآن", addToFavoritesBtn: "أضف للمفضلة", resetQueryBtn: "إعادة تعيين",
-            historyTitle: "سجلّ البحث", favoritesTitle: "الاستعلامات المفضلة", settingsTitle: "الإعدادات",
-            themeSetting: "تغيير الثيم", toggleThemeBtnDark: "التبديل إلى الوضع المظلم", toggleThemeBtnLight: "التبديل إلى الوضع الفاتح",
-            clearHistorySetting: "مسح سجل البحث", clearHistoryBtn: "مسح السجلّ",
-            exportDataSetting: "تصدير البيانات", exportJsonBtn: "تصدير إلى JSON", exportCsvBtn: "تصدير إلى CSV",
-            saveBtn: "حفظ", saveToFavoritesTitle: "حفظ في المفضلة", favoriteNamePlaceholder: "أدخل اسمًا للاستعلام...",
-            historyEmpty: "لا يوجد أي سجل بحث حتى الآن.", favoritesEmpty: "لا توجد أي استعلامات محفوظة في المفضلة.",
-            confirmDelete: "هل أنت متأكد من حذف هذا العنصر؟", confirmClearHistory: "تحذير: سيتم حذف جميع سجلات البحث بشكل نهائي. هل أنت متأكد؟",
-            urlCopied: "تم نسخ الرابط!", queryEmpty: "يرجى إدخال كلمات مفتاحية أولاً.", favoriteNameMissing: "يرجى إدخال اسم للاستعلام.",
-            reSearch: "إعادة البحث", copy: "نسخ", delete: "حذف", apply: "تطبيق", engineLabel: "محرك البحث",
-        },
-        en: {
-            appTitle: "Academic Search Helper", navMain: "Home", navHistory: "History", navFavorites: "Favorites", navSettings: "Settings",
-            searchEngineLabel: "Select Search Engine:", mainInputPlaceholder: "Type primary keywords here...",
-            cmdSite: "Search within a site", cmdFiletype: "Specify file type", cmdExclude: "Exclude a word", cmdExact: "Exact phrase", cmdIntitle: "Word in title",
-            queryPreviewTitle: "Final Query:", queryPreviewPlaceholder: "You have not built a query yet.",
-            finalUrlTitle: "Search URL:", copyBtn: "Copy", searchNowBtn: "Search Now", addToFavoritesBtn: "Add to Favorites", resetQueryBtn: "Reset",
-            historyTitle: "Search History", favoritesTitle: "Favorite Queries", settingsTitle: "Settings",
-            themeSetting: "Change Theme", toggleThemeBtnDark: "Switch to Dark Mode", toggleThemeBtnLight: "Switch to Light Mode",
-            clearHistorySetting: "Clear Search History", clearHistoryBtn: "Clear History",
-            exportDataSetting: "Export Data", exportJsonBtn: "Export to JSON", exportCsvBtn: "Export to CSV",
-            saveBtn: "Save", saveToFavoritesTitle: "Save to Favorites", favoriteNamePlaceholder: "Enter a name for the query...",
-            historyEmpty: "No search history yet.", favoritesEmpty: "No favorite queries saved yet.",
-            confirmDelete: "Are you sure you want to delete this item?", confirmClearHistory: "Warning: This will permanently delete your entire search history. Are you sure?",
-            urlCopied: "URL copied to clipboard!", queryEmpty: "Please enter keywords first.", favoriteNameMissing: "Please enter a name for the query.",
-            reSearch: "Re-search", copy: "Copy", delete: "Delete", apply: "Apply", engineLabel: "Engine",
-        }
-    };
-
+    ar: {
+        appTitle: "مساعد البحث الأكاديمي", 
+        navMain: "الرئيسية", 
+        navHistory: "السجلّ", 
+        navFavorites: "المفضلة", 
+        navSettings: "الإعدادات",
+        searchEngineLabel: "اختر محرك البحث:", 
+        mainInputPlaceholder: "اكتب الكلمات المفتاحية الأساسية هنا...",
+        
+        // --- أزرار الأوامر ---
+        cmdSite: "البحث داخل موقع", 
+        cmdFiletype: "تحديد نوع الملف", 
+        cmdExclude: "استبعاد كلمة", 
+        cmdExact: "بحث مطابق", 
+        cmdIntitle: "كلمة في العنوان",
+        cmdIntext: "كلمة داخل النص", 
+        cmdAllintext: "البحث عن جميع الكلمات (AND)", 
+        cmdAnyintext: "البحث عن أي كلمة (OR)", 
+        cmdDaterange: "تحديد نطاق زمني (مثال: 1990..2000)",
+        
+        // --- بقية النصوص ---
+        queryPreviewTitle: "الاستعلام النهائي:", 
+        queryPreviewPlaceholder: "لم تقم بتكوين أي استعلام بعد.",
+        finalUrlTitle: "رابط البحث:", 
+        copyBtn: "نسخ", 
+        searchNowBtn: "ابحث الآن", 
+        addToFavoritesBtn: "أضف للمفضلة", 
+        resetQueryBtn: "إعادة تعيين",
+        historyTitle: "سجلّ البحث", 
+        favoritesTitle: "الاستعلامات المفضلة", 
+        settingsTitle: "الإعدادات",
+        themeSetting: "تغيير الثيم", 
+        toggleThemeBtnDark: "التبديل إلى الوضع المظلم", 
+        toggleThemeBtnLight: "التبديل إلى الوضع الفاتح",
+        clearHistorySetting: "مسح سجل البحث", 
+        clearHistoryBtn: "مسح السجلّ",
+        exportDataSetting: "تصدير البيانات", 
+        exportJsonBtn: "تصدير إلى JSON", 
+        exportCsvBtn: "تصدير إلى CSV",
+        saveBtn: "حفظ", 
+        saveToFavoritesTitle: "حفظ في المفضلة", 
+        favoriteNamePlaceholder: "أدخل اسمًا للاستعلام...",
+        historyEmpty: "لا يوجد أي سجل بحث حتى الآن.", 
+        favoritesEmpty: "لا توجد أي استعلامات محفوظة في المفضلة.",
+        confirmDelete: "هل أنت متأكد من حذف هذا العنصر؟", 
+        confirmClearHistory: "تحذير: سيتم حذف جميع سجلات البحث بشكل نهائي. هل أنت متأكد؟",
+        urlCopied: "تم نسخ الرابط!", 
+        queryEmpty: "يرجى إدخال كلمات مفتاحية أولاً.", 
+        favoriteNameMissing: "يرجى إدخال اسم للاستعلام.",
+        reSearch: "إعادة البحث", 
+        copy: "نسخ", 
+        delete: "حذف", 
+        apply: "تطبيق", 
+        engineLabel: "محرك البحث",
+    },
+    en: {
+        appTitle: "Academic Search Helper", 
+        navMain: "Home", 
+        navHistory: "History", 
+        navFavorites: "Favorites", 
+        navSettings: "Settings",
+        searchEngineLabel: "Select Search Engine:", 
+        mainInputPlaceholder: "Type primary keywords here...",
+        
+        // --- Command Buttons ---
+        cmdSite: "Search within a site", 
+        cmdFiletype: "Specify file type", 
+        cmdExclude: "Exclude a word", 
+        cmdExact: "Exact phrase", 
+        cmdIntitle: "Word in title",
+        cmdIntext: "Word within the text", 
+        cmdAllintext: "Search for all words (AND)", 
+        cmdAnyintext: "Search for any word (OR)", 
+        cmdDaterange: "Specify date range (e.g., 1990..2000)",
+        
+        // --- Rest of the text ---
+        queryPreviewTitle: "Final Query:", 
+        queryPreviewPlaceholder: "You have not built a query yet.",
+        finalUrlTitle: "Search URL:", 
+        copyBtn: "Copy", 
+        searchNowBtn: "Search Now", 
+        addToFavoritesBtn: "Add to Favorites", 
+        resetQueryBtn: "Reset",
+        historyTitle: "Search History", 
+        favoritesTitle: "Favorite Queries", 
+        settingsTitle: "Settings",
+        themeSetting: "Change Theme", 
+        toggleThemeBtnDark: "Switch to Dark Mode", 
+        toggleThemeBtnLight: "Switch to Light Mode",
+        clearHistorySetting: "Clear Search History", 
+        clearHistoryBtn: "Clear History",
+        exportDataSetting: "Export Data", 
+        exportJsonBtn: "Export to JSON", 
+        exportCsvBtn: "Export to CSV",
+        saveBtn: "Save", 
+        saveToFavoritesTitle: "Save to Favorites", 
+        favoriteNamePlaceholder: "Enter a name for the query...",
+        historyEmpty: "No search history yet.", 
+        favoritesEmpty: "No favorite queries saved yet.",
+        confirmDelete: "Are you sure you want to delete this item?", 
+        confirmClearHistory: "Warning: This will permanently delete your entire search history. Are you sure?",
+        urlCopied: "URL copied to clipboard!", 
+        queryEmpty: "Please enter keywords first.", 
+        favoriteNameMissing: "Please enter a name for the query.",
+        reSearch: "Re-search", 
+        copy: "Copy", 
+        delete: "Delete", 
+        apply: "Apply", 
+        engineLabel: "Engine",
+    }
+};
     const setLanguage = (lang) => {
         document.documentElement.lang = lang;
         document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
@@ -95,21 +172,33 @@ document.addEventListener('DOMContentLoaded', () => {
     })();
 
     const updateQueryPreviewAndUrl = () => {
-        queryState.keywords = mainInput.value.trim();
-        const lang = localStorage.getItem('language') || 'ar';
-        let queryParts = [];
+    queryState.keywords = mainInput.value.trim();
+    const lang = localStorage.getItem('language') || 'ar';
+    let queryParts = [];
 
-        if (queryState.keywords) queryParts.push(queryState.keywords);
-        if (queryState.exact) queryParts.push(`"${queryState.exact}"`);
-        if (queryState.site) queryParts.push(`site:${queryState.site}`);
-        if (queryState.filetype) queryParts.push(`filetype:${queryState.filetype}`);
-        if (queryState.exclude) queryParts.push(`-${queryState.exclude}`);
-        if (queryState.intitle) queryParts.push(`intitle:"${queryState.intitle}"`);
-        
-        const fullQuery = queryParts.join(' ');
-        previewExplanation.textContent = fullQuery || locales[lang].queryPreviewPlaceholder;
-        finalUrlInput.value = fullQuery ? (searchEngineSelect.value + encodeURIComponent(fullQuery)) : '';
-    };
+    if (queryState.keywords) {
+        let keywords = queryState.keywords;
+        if (queryState.allintext) {
+            keywords += ` AND "${queryState.allintext}"`;
+        }
+        if (queryState.anyintext) {
+            keywords += ` OR "${queryState.anyintext}"`;
+        }
+        queryParts.push(keywords);
+    }
+    
+    if (queryState.exact) queryParts.push(`"${queryState.exact}"`);
+    if (queryState.site) queryParts.push(`site:${queryState.site}`);
+    if (queryState.filetype) queryParts.push(`filetype:${queryState.filetype}`);
+    if (queryState.exclude) queryParts.push(`-${queryState.exclude}`);
+    if (queryState.intitle) queryParts.push(`intitle:"${queryState.intitle}"`);
+    if (queryState.intext) queryParts.push(`intext:"${queryState.intext}"`);
+    if (queryState.daterange) queryParts.push(queryState.daterange);
+    
+    const fullQuery = queryParts.join(' ');
+    previewExplanation.textContent = fullQuery || locales[lang].queryPreviewPlaceholder;
+    finalUrlInput.value = fullQuery ? (searchEngineSelect.value + encodeURIComponent(fullQuery)) : '';
+};
 
     const openModal = (type) => {
         currentCommand = type;
