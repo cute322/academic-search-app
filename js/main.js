@@ -12,20 +12,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const resetQueryBtn = document.getElementById('reset-query-btn');
     const addToFavoritesBtn = document.getElementById('add-to-favorites-btn');
     const langSelect = document.getElementById('lang-select');
-
-    // عناصر Modal الأوامر
     const commandModal = document.getElementById('command-modal');
     const modalTitle = document.getElementById('modal-title');
     const modalInput = document.getElementById('modal-input');
     const modalSaveBtn = document.getElementById('modal-save-btn');
     const modalPredefinedChoices = document.getElementById('modal-predefined-choices');
-    
-    // عناصر Modal المفضلة
     const favoriteNameModal = document.getElementById('favorite-name-modal');
     const favoriteNameInput = document.getElementById('favorite-name-input');
     const saveFavoriteBtn = document.getElementById('save-favorite-btn');
-
-    // عناصر القوائم والإعدادات
     const closeBtns = document.querySelectorAll('.close-btn');
     const historyList = document.getElementById('history-list');
     const favoritesList = document.getElementById('favorites-list');
@@ -34,7 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const exportJsonBtn = document.getElementById('export-json-btn');
     const exportCsvBtn = document.getElementById('export-csv-btn');
     
-    // متغيرات الحالة
     let queryState = { keywords: '', site: '', filetype: '', exclude: '', exact: '', intitle: '' };
     let currentCommand = '';
 
