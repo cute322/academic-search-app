@@ -3,227 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Academic Search App | أداة البحث الأكاديمي المتقدمة</title>
-    <meta name="description" content="واجهة بحث أكاديمي احترافية، نظيفة، سريعة، ومريحة للباحثين — مع تحكّم متقدم في المصادر (ASJP, PubMed, Google Scholar...) وفلاتر دقيقة.">
+    
+    <!-- Meta Tags for SEO, Social Media, and Favicon -->
+    <title>مساعد البحث الأكاديمي | Barmaja - أداة بناء استعلامات البحث المتقدم</title>
+    <meta name="description" content="أداة ويب مجانية من Barmaja تساعد الطلاب والباحثين على إنشاء استعلامات بحث أكاديمي دقيقة ومتقدمة بسهولة. قم ببناء بحثك في Google Scholar و PubMed وغيرها بدلاً من كتابة الأوامر المعقدة.">
     <meta name="author" content="Dalila Cherif Slimane - Barmaja">
-    <meta name="keywords" content="بحث أكاديمي, أداة بحث علمي, بناء استعلامات البحث, صياغة استعلامات جوجل, بحث متقدم للطلاب, باحث جوجل العلمي, أدوات الباحثين, academic search helper, research query builder, advanced search tool, Google Scholar, PubMed, ASJP, Barmaja, Dalila Cherif Slimane">
+    <meta property="og:title" content="مساعد البحث الأكاديمي | Barmaja" />
+    <meta property="og:description" content="أداة مجانية لبناء استعلامات البحث الأكاديمي المتقدمة بسهولة." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://academic-search-app.netlify.app/" />
+    <meta property="og:image" content="https://academic-search-app.netlify.app/assets/images/preview-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="مساعد البحث الأكاديمي | Barmaja">
+    <meta name="twitter:description" content="أداة مجانية لبناء استعلامات البحث الأكاديمي المتقدمة بسهولة.">
+    <meta name="twitter:image" content="https://academic-search-app.netlify.app/assets/images/preview-image.png">
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <meta name="google-site-verification" content="0KOS6T1ypdZGkL3466YNKiJybzPNQ5Jr2tCnhkOulUE" />
-    <link rel="alternate" hreflang="ar" href="https://academic-search-app.netlify.app/" />
-    <link rel="alternate" hreflang="en" href="https://academic-search-app.netlify.app/" />
-    <link rel="alternate" hreflang="x-default" href="https://academic-search-app.netlify.app/" />
-
-    <!-- Google Fonts: Inter & Roboto -->
+    
+    <!-- Stylesheets and Fonts -->
+    <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-    <!-- Heroicons (for simple icons) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@heroicons/react@1.0.6/dist/heroicons.min.css">
-    <!-- Font Awesome (for more icons) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body class="light-theme">
 
-    <header class="main-header">
-        <div class="container header-content">
-            <div class="logo" data-lang-key="appTitle">
-                <i class="fas fa-book-reader"></i> Academic Search App
+    <header>
+        <nav class="container">
+            <div class="logo" data-lang-key="appTitle">مساعد البحث الأكاديمي</div>
+            <div class="nav-links">
+                <button id="nav-main" class="nav-btn active" data-lang-key="navMain">الرئيسية</button>
+                <button id="nav-history" class="nav-btn" data-lang-key="navHistory">السجلّ</button>
+                <button id="nav-favorites" class="nav-btn" data-lang-key="navFavorites">المفضلة</button>
+                <button id="nav-settings" class="nav-btn" data-lang-key="navSettings">الإعدادات</button>
             </div>
-            <div class="search-bar-header">
-                <input type="text" id="main-input-header" placeholder="ابحث عن مقالات، أبحاث، كتب...">
-                <button class="search-btn-header"><i class="fas fa-search"></i></button>
+            <div class="language-switcher">
+                <select id="lang-select">
+                    <option value="ar">العربية</option>
+                    <option value="en">English</option>
+                </select>
             </div>
-            <div class="header-actions">
-                <button id="toggle-theme-btn" class="icon-btn" data-lang-key="toggleThemeBtnKey"><i class="fas fa-moon"></i></button>
-                <div class="language-switcher">
-                    <select id="lang-select">
-                        <option value="ar">العربية</option>
-                        <option value="en">English</option>
-                    </select>
-                </div>
-            </div>
-        </div>
+        </nav>
     </header>
 
-    <main class="main-layout container">
-        <!-- Left Sidebar for Filters -->
-        <aside class="sidebar left-sidebar">
-            <div class="card filter-section">
-                <h4 data-lang-key="sourceSelectorTitle">مصادر البحث</h4>
-                <div class="source-chips">
-                    <label class="chip-item">
-                        <input type="checkbox" name="source" value="Google Scholar" data-url="https://scholar.google.com/scholar?q=" checked> Google Scholar
-                    </label>
-                    <label class="chip-item">
-                        <input type="checkbox" name="source" value="PubMed" data-url="https://pubmed.ncbi.nlm.nih.gov/?term="> PubMed
-                    </label>
-                    <label class="chip-item">
-                        <input type="checkbox" name="source" value="ASJP" data-url="https://www.asjp.cerist.dz/search?q="> ASJP
-                    </label>
-                    <label class="chip-item">
-                        <input type="checkbox" name="source" value="ArXiv" data-url="https://arxiv.org/search/?query="> ArXiv
-                    </label>
-                    <label class="chip-item">
-                        <input type="checkbox" name="source" value="JSTOR" data-url="https://www.jstor.org/action/doBasicSearch?Query="> JSTOR
-                    </label>
-                    <label class="chip-item">
-                        <input type="checkbox" name="source" value="CORE" data-url="https://core.ac.uk/search?q="> CORE
-                    </label>
-                    <label class="chip-item">
-                        <input type="checkbox" name="source" value="Semantic Scholar" data-url="https://www.semanticscholar.org/search?q="> Semantic Scholar
-                    </label>
-                    <!-- Add more sources as needed -->
-                </div>
-                <button class="btn-secondary mt-3" id="select-all-sources">تحديد الكل</button>
-                <button class="btn-secondary mt-3" id="clear-all-sources">مسح الكل</button>
-            </div>
-
-            <div class="card filter-section">
-                <h4 data-lang-key="advancedFiltersTitle">فلاتر متقدمة</h4>
-                <div class="filter-group">
-                    <label for="filetype-filter" data-lang-key="filetypeFilter">نوع الملف:</label>
-                    <select id="filetype-filter">
-                        <option value="">الكل</option>
-                        <option value="pdf">PDF</option>
-                        <option value="html">HTML</option>
-                        <option value="doc">DOC</option>
-                        <option value="video">Video</option>
+    <main>
+        <section id="main-screen" class="screen active">
+            <div class="container">
+                <div class="search-engine-selector card">
+                    <label for="search-engine" data-lang-key="searchEngineLabel">اختر محرك البحث:</label>
+                    <select id="search-engine">
+                        <optgroup label="محركات بحث أكاديمية عالمية">
+                            <option value="https://scholar.google.com/scholar?q=" data-name="Google Scholar">Google Scholar</option>
+                            <option value="https://www.bing.com/search?q=" data-name="Bing Academic">Bing Academic</option>
+                            <option value="https://www.semanticscholar.org/search?q=" data-name="Semantic Scholar">Semantic Scholar</option>
+                            <option value="https://www.base-search.net/Search/Results?lookfor=" data-name="BASE">BASE Search Engine</option>
+                            <option value="https://core.ac.uk/search?q=" data-name="CORE">CORE</option>
+                            <option value="https://worldwidescience.org/wws/desktop/en/search.html?searchterm=" data-name="WorldWideScience">WorldWideScience</option>
+                            <option value="https://www.refseek.com/search?q=" data-name="RefSeek">RefSeek</option>
+                            <option value="https://www.science.gov/scigov/desktop/en/search.html?searchterm=" data-name="Science.gov">Science.gov</option>
+                            <option value="https://www.researchgate.net/search/publication?q=" data-name="ResearchGate">ResearchGate</option>
+                            <option value="https://www.academia.edu/search?q=" data-name="Academia.edu">Academia.edu</option>
+                        </optgroup>
+                        <optgroup label="محركات متخصصة حسب المجال">
+                            <option value="https://pubmed.ncbi.nlm.nih.gov/?term=" data-name="PubMed">PubMed (الطب وعلوم الحياة)</option>
+                            <option value="https://ieeexplore.ieee.org/search/searchresult.jsp?queryText=" data-name="IEEE Xplore">IEEE Xplore (الهندسة والإعلام الآلي)</option>
+                            <option value="https://eric.ed.gov/?q=" data-name="ERIC">ERIC (التعليم والتربية)</option>
+                            <option value="https://arxiv.org/search/?query=" data-name="ArXiv">ArXiv (الفيزياء والرياضيات)</option>
+                            <option value="https://www.jstor.org/action/doBasicSearch?Query=" data-name="JSTOR">JSTOR (العلوم الإنسانية والاجتماعية)</option>
+                            <option value="https://papers.ssrn.com/sol3/results.cfm?txtKey_Words=" data-name="SSRN">SSRN (الاقتصاد والقانون)</option>
+                        </optgroup>
                     </select>
                 </div>
-                <div class="filter-group">
-                    <label for="domain-filter" data-lang-key="domainFilter">المجال:</label>
-                    <select id="domain-filter">
-                        <option value="">الكل</option>
-                        <option value="medicine">الطب</option>
-                        <option value="education">التعليم</option>
-                        <option value="engineering">الهندسة</option>
-                        <!-- Add more domains -->
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label for="year-filter" data-lang-key="yearFilter">السنة:</label>
-                    <input type="number" id="year-filter" placeholder="مثال: 2023">
-                </div>
-                <div class="filter-group">
-                    <label for="language-filter" data-lang-key="languageFilter">اللغة:</label>
-                    <select id="language-filter">
-                        <option value="">الكل</option>
-                        <option value="ar">العربية</option>
-                        <option value="en">الإنجليزية</option>
-                        <option value="fr">الفرنسية</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label for="exclude-filter" data-lang-key="excludeFilter">استبعاد كلمات:</label>
-                    <input type="text" id="exclude-filter" placeholder="مثال: COVID-19">
-                </div>
-            </div>
-        </aside>
 
-        <!-- Center Content Area (Search Results) -->
-        <section class="center-content">
-            <div class="search-input-main card">
-                <input type="text" id="main-input" data-lang-key="mainInputPlaceholder" placeholder="ابحث عن مقالات، أبحاث، كتب...">
-                <button id="search-now-btn" class="primary-btn" data-lang-key="searchNowBtn"><i class="fas fa-search"></i> ابحث الآن</button>
-            </div>
-
-            <div class="query-preview-container card">
-                <h3 data-lang-key="queryPreviewTitle">الاستعلام النهائي:</h3>
-                <p id="preview-explanation" data-lang-key="queryPreviewPlaceholder">لم تقم بتكوين أي استعلام بعد.</p>
-                <div class="url-box">
-                    <input type="text" id="final-url" readonly>
-                    <button id="copy-url-btn" class="btn-icon" data-lang-key="copyBtn"><i class="fas fa-copy"></i></button>
-                </div>
-                <div class="action-buttons mt-3">
-                    <button id="add-to-favorites-btn" class="btn-secondary" data-lang-key="addToFavoritesBtn"><i class="fas fa-star"></i> أضف للمفضلة</button>
-                    <button id="reset-query-btn" class="btn-secondary" data-lang-key="resetQueryBtn"><i class="fas fa-redo"></i> إعادة تعيين</button>
-                </div>
-            </div>
-
-            <div class="results-area">
-                <h2 data-lang-key="resultsTitle">نتائج البحث</h2>
-                <div id="search-results-list" class="results-list">
-                    <!-- Search results will be dynamically loaded here -->
-                    <div class="card result-item placeholder-item">
-                        <h3 class="result-title">عنوان البحث التجريبي 1</h3>
-                        <p class="result-meta">المؤلفون • المجلة • 2023</p>
-                        <div class="result-badges">
-                            <span class="badge">PDF</span>
-                            <span class="badge">Google Scholar</span>
-                        </div>
-                        <p class="result-snippet">ملخص قصير يصف محتوى البحث، يظهر هنا لمساعدة المستخدم على فهم ما إذا كانت النتيجة ذات صلة.</p>
-                        <div class="result-actions">
-                            <a href="#" target="_blank" class="btn-primary-sm"><i class="fas fa-external-link-alt"></i> فتح المصدر</a>
-                            <button class="btn-secondary-sm"><i class="fas fa-bookmark"></i> حفظ</button>
-                            <button class="btn-secondary-sm"><i class="fas fa-share-alt"></i> مشاركة</button>
+                <div class="query-builder-grid">
+                    <div class="search-box card">
+                        <input type="text" id="main-input" data-lang-key="mainInputPlaceholder" placeholder="اكتب الكلمات المفتاحية الأساسية هنا...">
+                        <div class="command-buttons">
+                            <button class="command-btn" data-command="site">
+                                <svg class="icon" xmlns="http://www.w.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                                <span data-lang-key="cmdSite">البحث داخل موقع</span>
+                            </button>
+                            <button class="command-btn" data-command="filetype">
+                                <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+                                <span data-lang-key="cmdFiletype">تحديد نوع الملف</span>
+                            </button>
+                            <button class="command-btn" data-command="exclude">
+                                <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                <span data-lang-key="cmdExclude">استبعاد كلمة</span>
+                            </button>
+                            <button class="command-btn" data-command="exact">
+                                <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                                <span data-lang-key="cmdExact">بحث مطابق</span>
+                            </button>
+                            <button class="command-btn" data-command="intitle">
+                                <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="20" y2="7"></line><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line><path d="M5 7L5 5A2 2 0 0 1 7 3h10a2 2 0 0 1 2 2v2"></path><path d="M19 7L19 21L5 21L5 7"></path></svg>
+                                <span data-lang-key="cmdIntitle">كلمة في العنوان</span>
+                            </button>
                         </div>
                     </div>
-                    <div class="card result-item placeholder-item">
-                        <h3 class="result-title">عنوان البحث التجريبي 2</h3>
-                        <p class="result-meta">المؤلفون • المجلة • 2022</p>
-                        <div class="result-badges">
-                            <span class="badge">HTML</span>
-                            <span class="badge">PubMed</span>
-                        </div>
-                        <p class="result-snippet">ملخص قصير يصف محتوى البحث، يظهر هنا لمساعدة المستخدم على فهم ما إذا كانت النتيجة ذات صلة.</p>
-                        <div class="result-actions">
-                            <a href="#" target="_blank" class="btn-primary-sm"><i class="fas fa-external-link-alt"></i> فتح المصدر</a>
-                            <button class="btn-secondary-sm"><i class="fas fa-bookmark"></i> حفظ</button>
-                            <button class="btn-secondary-sm"><i class="fas fa-share-alt"></i> مشاركة</button>
+
+                    <div class="query-preview-container card">
+                        <h3 data-lang-key="queryPreviewTitle">الاستعلام النهائي:</h3>
+                        <p id="preview-explanation" data-lang-key="queryPreviewPlaceholder">لم تقم بتكوين أي استعلام بعد.</p>
+                        
+                        <h3 data-lang-key="finalUrlTitle">رابط البحث:</h3>
+                        <div class="url-box">
+                            <input type="text" id="final-url" readonly>
+                            <button id="copy-url-btn" data-lang-key="copyBtn">نسخ</button>
                         </div>
                     </div>
                 </div>
-                <button id="load-more-btn" class="primary-btn load-more-btn" style="display: none;">تحميل المزيد</button>
+
+                <div class="action-buttons">
+                    <button id="search-now-btn" class="primary-btn" data-lang-key="searchNowBtn">ابحث الآن</button>
+                    <button id="add-to-favorites-btn" class="primary-btn" data-lang-key="addToFavoritesBtn">أضف للمفضلة</button>
+                    <button id="reset-query-btn" class="primary-btn" data-lang-key="resetQueryBtn">إعادة تعيين</button>
+                </div>
             </div>
         </section>
 
-        <!-- Right Sidebar (Optional: History, Favorites) -->
-        <aside class="sidebar right-sidebar">
-            <div class="card">
-                <h4 data-lang-key="historyTitle">سجلّ البحث</h4>
-                <div id="history-list" class="data-list">
-                    <!-- History items will be loaded here -->
-                </div>
-                <button id="clear-history-btn" class="danger-btn mt-3" data-lang-key="clearHistoryBtn">مسح السجلّ</button>
+        <section id="history-screen" class="screen">
+            <div class="container">
+                <h2 data-lang-key="historyTitle">سجلّ البحث</h2>
+                <div id="history-list" class="data-list"></div>
             </div>
-            <div class="card mt-4">
-                <h4 data-lang-key="favoritesTitle">الاستعلامات المفضلة</h4>
-                <div id="favorites-list" class="data-list">
-                    <!-- Favorites items will be loaded here -->
+        </section>
+        <section id="favorites-screen" class="screen">
+            <div class="container">
+                <h2 data-lang-key="favoritesTitle">الاستعلامات المفضلة</h2>
+                <div id="favorites-list" class="data-list"></div>
+            </div>
+        </section>
+        <section id="settings-screen" class="screen">
+            <div class="container">
+                <h2 data-lang-key="settingsTitle">الإعدادات</h2>
+                <div class="setting-item card">
+                    <p data-lang-key="themeSetting">تغيير الثيم</p>
+                    <button id="toggle-theme-btn" data-lang-key="toggleThemeBtnKey">التبديل إلى الوضع المظلم</button>
+                </div>
+                <div class="setting-item card">
+                    <p data-lang-key="clearHistorySetting">مسح سجل البحث</p>
+                    <button id="clear-history-btn" class="danger-btn" data-lang-key="clearHistoryBtn">مسح السجلّ</button>
+                </div>
+                <div class="setting-item card">
+                    <p data-lang-key="exportDataSetting">تصدير البيانات</p>
+                    <div>
+                        <button id="export-json-btn" data-lang-key="exportJsonBtn">تصدير إلى JSON</button>
+                        <button id="export-csv-btn" data-lang-key="exportCsvBtn">تصدير إلى CSV</button>
+                    </div>
                 </div>
             </div>
-        </aside>
+        </section>
     </main>
 
     <footer>
-        <div class="container footer-content">
-            <div class="footer-section">
-                <h4><i class="fas fa-info-circle"></i> حول التطبيق</h4>
-                <p>Academic Search App هو أداة مجانية لمساعدة الباحثين والطلاب على صياغة استعلامات بحث دقيقة عبر مصادر أكاديمية متعددة.</p>
+        <div class="container">
+            <div class="footer-content">
+                <div class="dev-info">
+                    <h4>للتواصل مع المطورة</h4>
+                    <p><strong>الاسم:</strong> دليلة شريف سليمان</p>
+                    <p><strong>البريد الإلكتروني:</strong> <a href="mailto:barmajawebb@gmail.com">barmajawebb@gmail.com</a></p>
+                    <p><strong>الصفحة:</strong> <a href="https://www.facebook.com/share/1B3sVo5ReG/" target="_blank" rel="noopener noreferrer">Barmaja on Facebook</a></p>
+                </div>
+                <div class="legal-info">
+                    <h4>الحقوق والأمان</h4>
+                    <p>هذا الموقع محمي بموجب حقوق الملكية الفكرية وهو ملكية خاصة للمطورة. لا يحق نسخ، تعديل، أو استخدام الكود البرمجي والتصميم لأي غرض كان دون إذن خطي مسبق.</p>
+                    <p class="privacy-terms">شروط الاستخدام - سياسة الخصوصية</p>
+                </div>
             </div>
-            <div class="footer-section">
-                <h4><i class="fas fa-link"></i> روابط سريعة</h4>
-                <ul>
-                    <li><a href="#" data-lang-key="privacyPolicy">سياسة الخصوصية</a></li>
-                    <li><a href="#" data-lang-key="termsOfUse">شروط الاستخدام</a></li>
-                    <li><a href="#" data-lang-key="contactUs">تواصل معنا</a></li>
-                </ul>
+            <div class="copyright-info">
+                <p>© 2025 Barmaja - جميع الحقوق محفوظة.</p>
+                <p>الإصدار 1.0 (تاريخ الإصدار: سبتمبر 2025)</p>
             </div>
-            <div class="footer-section">
-                <h4><i class="fas fa-envelope"></i> تواصل مع المطورة</h4>
-                <p><strong>الاسم:</strong> دليلة شريف سليمان</p>
-                <p><strong>البريد الإلكتروني:</strong> <a href="mailto:barmajawebb@gmail.com">barmajawebb@gmail.com</a></p>
-            </div>
-        </div>
-        <div class="copyright-info container">
-            <p>© 2025 Dalila Cherif Slimane - جميع الحقوق محفوظة.</p>
-            <p>الإصدار 1.0 (تاريخ الإصدار: سبتمبر 2025)</p>
         </div>
     </footer>
 
-    <!-- Modals (keep them for now, but their usage might change with new UX) -->
     <div id="command-modal" class="modal">
         <div class="modal-content card">
             <span class="close-btn">&times;</span>

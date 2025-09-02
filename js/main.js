@@ -1,144 +1,76 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- 1. تعريف المتغيرات والعناصر ---
-    const mainInputHeader = document.getElementById('main-input-header');
-    const searchBtnHeader = document.querySelector('.search-btn-header');
+    const screens = document.querySelectorAll('.screen');
+    const navButtons = document.querySelectorAll('.nav-btn');
     const mainInput = document.getElementById('main-input');
-    const searchNowBtn = document.getElementById('search-now-btn');
-    const sourceChips = document.querySelectorAll('.source-chips input[type="checkbox"]');
-    const selectAllSourcesBtn = document.getElementById('select-all-sources');
-    const clearAllSourcesBtn = document.getElementById('clear-all-sources');
-    const filetypeFilter = document.getElementById('filetype-filter');
-    const domainFilter = document.getElementById('domain-filter');
-    const yearFilter = document.getElementById('year-filter');
-    const languageFilter = document.getElementById('language-filter');
-    const excludeFilter = document.getElementById('exclude-filter');
+    const commandButtons = document.querySelectorAll('.command-btn');
+    const searchEngineSelect = document.getElementById('search-engine');
     const previewExplanation = document.getElementById('preview-explanation');
     const finalUrlInput = document.getElementById('final-url');
     const copyUrlBtn = document.getElementById('copy-url-btn');
+    const searchNowBtn = document.getElementById('search-now-btn');
     const resetQueryBtn = document.getElementById('reset-query-btn');
     const addToFavoritesBtn = document.getElementById('add-to-favorites-btn');
-    const toggleThemeBtn = document.getElementById('toggle-theme-btn');
     const langSelect = document.getElementById('lang-select');
-    const historyList = document.getElementById('history-list');
-    const favoritesList = document.getElementById('favorites-list');
-    const clearHistoryBtn = document.getElementById('clear-history-btn');
-    const searchResultsList = document.getElementById('search-results-list');
-    const loadMoreBtn = document.getElementById('load-more-btn');
 
-    // عناصر Modal
-    const commandModal = document.getElementById('command-modal'); // Keep for now, might be removed
+    // عناصر Modal الأوامر
+    const commandModal = document.getElementById('command-modal');
     const modalTitle = document.getElementById('modal-title');
     const modalInput = document.getElementById('modal-input');
     const modalSaveBtn = document.getElementById('modal-save-btn');
     const modalPredefinedChoices = document.getElementById('modal-predefined-choices');
+    
+    // عناصر Modal المفضلة
     const favoriteNameModal = document.getElementById('favorite-name-modal');
     const favoriteNameInput = document.getElementById('favorite-name-input');
     const saveFavoriteBtn = document.getElementById('save-favorite-btn');
-    const closeBtns = document.querySelectorAll('.close-btn');
 
+    // عناصر القوائم والإعدادات
+    const closeBtns = document.querySelectorAll('.close-btn');
+    const historyList = document.getElementById('history-list');
+    const favoritesList = document.getElementById('favorites-list');
+    const toggleThemeBtn = document.getElementById('toggle-theme-btn');
+    const clearHistoryBtn = document.getElementById('clear-history-btn');
+    const exportJsonBtn = document.getElementById('export-json-btn');
+    const exportCsvBtn = document.getElementById('export-csv-btn');
+    
     // متغيرات الحالة
-    let queryState = {
-        keywords: '',
-        sources: [], // Array of selected source URLs
-        filetype: '',
-        domain: '',
-        year: '',
-        language: '',
-        exclude: '',
-        exact: '', // Kept for potential future use or if command modal is reused
-        intitle: '' // Kept for potential future use or if command modal is reused
-    };
-    let currentCommand = ''; // Used by the old command modal
+    let queryState = { keywords: '', site: '', filetype: '', exclude: '', exact: '', intitle: '' };
+    let currentCommand = '';
 
     // --- 2. نظام تغيير اللغة (Internationalization) ---
     const locales = {
         ar: {
-            appTitle: "Academic Search App",
-            sourceSelectorTitle: "مصادر البحث",
-            advancedFiltersTitle: "فلاتر متقدمة",
-            filetypeFilter: "نوع الملف:",
-            domainFilter: "المجال:",
-            yearFilter: "السنة:",
-            languageFilter: "اللغة:",
-            excludeFilter: "استبعاد كلمات:",
-            mainInputPlaceholder: "ابحث عن مقالات، أبحاث، كتب...",
-            searchNowBtn: "ابحث الآن",
-            queryPreviewTitle: "الاستعلام النهائي:",
-            queryPreviewPlaceholder: "لم تقم بتكوين أي استعلام بعد.",
-            finalUrlTitle: "رابط البحث:",
-            copyBtn: "نسخ",
-            addToFavoritesBtn: "أضف للمفضلة",
-            resetQueryBtn: "إعادة تعيين",
-            resultsTitle: "نتائج البحث",
-            historyTitle: "سجلّ البحث",
-            favoritesTitle: "الاستعلامات المفضلة",
-            toggleThemeBtnKey: "التبديل إلى الوضع الداكن", // Initial text, will be updated
-            clearHistoryBtn: "مسح السجلّ",
-            saveBtn: "حفظ",
-            saveToFavoritesTitle: "حفظ في المفضلة",
-            favoriteNamePlaceholder: "أدخل اسمًا للاستعلام...",
-            historyEmpty: "لا يوجد أي سجل بحث حتى الآن.",
-            favoritesEmpty: "لا توجد أي استعلامات محفوظة في المفضلة.",
-            confirmDelete: "هل أنت متأكد من حذف هذا العنصر؟",
-            confirmClearHistory: "تحذير: سيتم حذف جميع سجلات البحث بشكل نهائي. هل أنت متأكد؟",
-            urlCopied: "تم نسخ الرابط!",
-            queryEmpty: "يرجى إدخال كلمات مفتاحية أولاً.",
-            favoriteNameMissing: "يرجى إدخال اسم للاستعلام.",
-            reSearch: "إعادة البحث",
-            copy: "نسخ",
-            delete: "حذف",
-            apply: "تطبيق",
-            engineLabel: "المصدر",
-            privacyPolicy: "سياسة الخصوصية",
-            termsOfUse: "شروط الاستخدام",
-            contactUs: "تواصل معنا",
-            selectAll: "تحديد الكل",
-            clearAll: "مسح الكل",
-            loadMore: "تحميل المزيد",
+            appTitle: "مساعد البحث الأكاديمي", navMain: "الرئيسية", navHistory: "السجلّ", navFavorites: "المفضلة", navSettings: "الإعدادات",
+            searchEngineLabel: "اختر محرك البحث:", mainInputPlaceholder: "اكتب الكلمات المفتاحية الأساسية هنا...",
+            cmdSite: "البحث داخل موقع", cmdFiletype: "تحديد نوع الملف", cmdExclude: "استبعاد كلمة", cmdExact: "بحث مطابق", cmdIntitle: "كلمة في العنوان",
+            queryPreviewTitle: "الاستعلام النهائي:", queryPreviewPlaceholder: "لم تقم بتكوين أي استعلام بعد.",
+            finalUrlTitle: "رابط البحث:", copyBtn: "نسخ", searchNowBtn: "ابحث الآن", addToFavoritesBtn: "أضف للمفضلة", resetQueryBtn: "إعادة تعيين",
+            historyTitle: "سجلّ البحث", favoritesTitle: "الاستعلامات المفضلة", settingsTitle: "الإعدادات",
+            themeSetting: "تغيير الثيم", toggleThemeBtnDark: "التبديل إلى الوضع المظلم", toggleThemeBtnLight: "التبديل إلى الوضع الفاتح",
+            clearHistorySetting: "مسح سجل البحث", clearHistoryBtn: "مسح السجلّ",
+            exportDataSetting: "تصدير البيانات", exportJsonBtn: "تصدير إلى JSON", exportCsvBtn: "تصدير إلى CSV",
+            saveBtn: "حفظ", saveToFavoritesTitle: "حفظ في المفضلة", favoriteNamePlaceholder: "أدخل اسمًا للاستعلام...",
+            historyEmpty: "لا يوجد أي سجل بحث حتى الآن.", favoritesEmpty: "لا توجد أي استعلامات محفوظة في المفضلة.",
+            confirmDelete: "هل أنت متأكد من حذف هذا العنصر؟", confirmClearHistory: "تحذير: سيتم حذف جميع سجلات البحث بشكل نهائي. هل أنت متأكد؟",
+            urlCopied: "تم نسخ الرابط!", queryEmpty: "يرجى إدخال كلمات مفتاحية أولاً.", favoriteNameMissing: "يرجى إدخال اسم للاستعلام.",
+            reSearch: "إعادة البحث", copy: "نسخ", delete: "حذف", apply: "تطبيق", engineLabel: "محرك البحث",
         },
         en: {
-            appTitle: "Academic Search App",
-            sourceSelectorTitle: "Search Sources",
-            advancedFiltersTitle: "Advanced Filters",
-            filetypeFilter: "File Type:",
-            domainFilter: "Domain:",
-            yearFilter: "Year:",
-            languageFilter: "Language:",
-            excludeFilter: "Exclude Keywords:",
-            mainInputPlaceholder: "Search for articles, research, books...",
-            searchNowBtn: "Search Now",
-            queryPreviewTitle: "Final Query:",
-            queryPreviewPlaceholder: "You have not built a query yet.",
-            finalUrlTitle: "Search URL:",
-            copyBtn: "Copy",
-            addToFavoritesBtn: "Add to Favorites",
-            resetQueryBtn: "Reset",
-            resultsTitle: "Search Results",
-            historyTitle: "Search History",
-            favoritesTitle: "Favorite Queries",
-            toggleThemeBtnKey: "Switch to Dark Mode", // Initial text, will be updated
-            clearHistoryBtn: "Clear History",
-            saveBtn: "Save",
-            saveToFavoritesTitle: "Save to Favorites",
-            favoriteNamePlaceholder: "Enter a name for the query...",
-            historyEmpty: "No search history yet.",
-            favoritesEmpty: "No favorite queries saved yet.",
-            confirmDelete: "Are you sure you want to delete this item?",
-            confirmClearHistory: "Warning: This will permanently delete your entire search history. Are you sure?",
-            urlCopied: "URL copied to clipboard!",
-            queryEmpty: "Please enter keywords first.",
-            favoriteNameMissing: "Please enter a name for the query.",
-            reSearch: "Re-search",
-            copy: "Copy",
-            delete: "Delete",
-            apply: "Apply",
-            engineLabel: "Source",
-            privacyPolicy: "Privacy Policy",
-            termsOfUse: "Terms of Use",
-            contactUs: "Contact Us",
-            selectAll: "Select All",
-            clearAll: "Clear All",
-            loadMore: "Load More",
+            appTitle: "Academic Search Helper", navMain: "Home", navHistory: "History", navFavorites: "Favorites", navSettings: "Settings",
+            searchEngineLabel: "Select Search Engine:", mainInputPlaceholder: "Type primary keywords here...",
+            cmdSite: "Search within a site", cmdFiletype: "Specify file type", cmdExclude: "Exclude a word", cmdExact: "Exact phrase", cmdIntitle: "Word in title",
+            queryPreviewTitle: "Final Query:", queryPreviewPlaceholder: "You have not built a query yet.",
+            finalUrlTitle: "Search URL:", copyBtn: "Copy", searchNowBtn: "Search Now", addToFavoritesBtn: "Add to Favorites", resetQueryBtn: "Reset",
+            historyTitle: "Search History", favoritesTitle: "Favorite Queries", settingsTitle: "Settings",
+            themeSetting: "Change Theme", toggleThemeBtnDark: "Switch to Dark Mode", toggleThemeBtnLight: "Switch to Light Mode",
+            clearHistorySetting: "Clear Search History", clearHistoryBtn: "Clear History",
+            exportDataSetting: "Export Data", exportJsonBtn: "Export to JSON", exportCsvBtn: "Export to CSV",
+            saveBtn: "Save", saveToFavoritesTitle: "Save to Favorites", favoriteNamePlaceholder: "Enter a name for the query...",
+            historyEmpty: "No search history yet.", favoritesEmpty: "No favorite queries saved yet.",
+            confirmDelete: "Are you sure you want to delete this item?", confirmClearHistory: "Warning: This will permanently delete your entire search history. Are you sure?",
+            urlCopied: "URL copied to clipboard!", queryEmpty: "Please enter keywords first.", favoriteNameMissing: "Please enter a name for the query.",
+            reSearch: "Re-search", copy: "Copy", delete: "Delete", apply: "Apply", engineLabel: "Engine",
         }
     };
 
@@ -152,22 +84,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.querySelectorAll('[data-lang-key]').forEach(el => {
             const key = el.getAttribute('data-lang-key');
+            if (key === 'toggleThemeBtnKey') return;
             const translation = locales[lang][key];
             if (translation) {
                 if (el.placeholder) el.placeholder = translation;
                 else el.textContent = translation;
             }
         });
-        // Special handling for toggleThemeBtnKey as its text changes based on current theme
         updateThemeButtonText();
-        // Update button texts for select/clear all sources
-        selectAllSourcesBtn.textContent = locales[lang].selectAll;
-        clearAllSourcesBtn.textContent = locales[lang].clearAll;
-        loadMoreBtn.textContent = locales[lang].loadMore;
-
         updateQueryPreviewAndUrl();
-        loadHistory(); // Reload history with new language
-        loadFavorites(); // Reload favorites with new language
     };
 
     const deviceId = (() => {
@@ -176,49 +101,28 @@ document.addEventListener('DOMContentLoaded', () => {
         return id;
     })();
 
-    // --- 3. وظائف بناء الاستعلام وتحديث الواجهة ---
     const updateQueryPreviewAndUrl = () => {
         queryState.keywords = mainInput.value.trim();
         const lang = localStorage.getItem('language') || 'ar';
         let queryParts = [];
 
         if (queryState.keywords) queryParts.push(queryState.keywords);
-        if (queryState.filetype) queryParts.push(`filetype:${queryState.filetype}`);
-        // Domain, Year, Language are typically not direct search operators for all engines
-        // They would be handled by the search engine's advanced search page or API
-        // For now, we'll include them as general keywords if they are not specific operators
-        if (queryState.domain) queryParts.push(queryState.domain);
-        if (queryState.year) queryParts.push(queryState.year);
-        if (queryState.language) queryParts.push(`lang:${queryState.language}`); // Some engines support lang:
-        if (queryState.exclude) queryParts.push(`-${queryState.exclude}`);
-        // If exact/intitle are still used from the old command modal
         if (queryState.exact) queryParts.push(`"${queryState.exact}"`);
+        if (queryState.site) queryParts.push(`site:${queryState.site}`);
+        if (queryState.filetype) queryParts.push(`filetype:${queryState.filetype}`);
+        if (queryState.exclude) queryParts.push(`-${queryState.exclude}`);
         if (queryState.intitle) queryParts.push(`intitle:"${queryState.intitle}"`);
         
         const fullQuery = queryParts.join(' ');
         previewExplanation.textContent = fullQuery || locales[lang].queryPreviewPlaceholder;
-
-        // Construct URLs for selected sources
-        const selectedSources = Array.from(sourceChips)
-            .filter(checkbox => checkbox.checked)
-            .map(checkbox => ({
-                name: checkbox.value,
-                url: checkbox.dataset.url + encodeURIComponent(fullQuery)
-            }));
-        
-        // For simplicity, finalUrlInput will show the URL for the first selected source
-        // In a real app, you'd search all selected sources and display results from each
-        finalUrlInput.value = selectedSources.length > 0 ? selectedSources[0].url : '';
-        queryState.sources = selectedSources; // Store selected sources with their URLs
+        finalUrlInput.value = fullQuery ? (searchEngineSelect.value + encodeURIComponent(fullQuery)) : '';
     };
 
-    // --- 4. وظائف فتح وإغلاق الـ Modals (قد تتغير أو تُزال) ---
     const openModal = (type) => {
         currentCommand = type;
         const lang = localStorage.getItem('language') || 'ar';
-        // This part is from the old design, might not be needed with new filters
         const keyMap = { site: 'cmdSite', filetype: 'cmdFiletype', exclude: 'cmdExclude', exact: 'cmdExact', intitle: 'cmdIntitle' };
-        modalTitle.textContent = locales[lang][keyMap[type]] || type; // Fallback if key not found
+        modalTitle.textContent = locales[lang][keyMap[type]];
         modalInput.value = queryState[type] || '';
 
         const predefinedChoices = { filetype: ['pdf', 'docx', 'pptx', 'xlsx', 'csv'] };
@@ -237,368 +141,149 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     
     const closeModal = () => { commandModal.style.display = 'none'; favoriteNameModal.style.display = 'none'; };
+    const applyTheme = (theme) => { document.body.classList.toggle('dark-theme', theme === 'dark'); document.body.classList.toggle('light-theme', theme !== 'dark'); localStorage.setItem('theme', theme); updateThemeButtonText(); };
+    const updateThemeButtonText = () => { const lang = localStorage.getItem('language') || 'ar'; const theme = localStorage.getItem('theme') || 'light'; toggleThemeBtn.textContent = (theme === 'light') ? locales[lang].toggleThemeBtnDark : locales[lang].toggleThemeBtnLight; };
 
-    // --- 5. وظائف الثيم ---
-    const applyTheme = (theme) => {
-        document.body.classList.toggle('dark-theme', theme === 'dark');
-        document.body.classList.toggle('light-theme', theme !== 'dark');
-        localStorage.setItem('theme', theme);
-        updateThemeButtonText();
-    };
-
-    const updateThemeButtonText = () => {
-        const lang = localStorage.getItem('language') || 'ar';
-        const theme = localStorage.getItem('theme') || 'light';
-        const icon = toggleThemeBtn.querySelector('i');
-        if (theme === 'light') {
-            icon.classList.remove('fa-sun');
-            icon.classList.add('fa-moon');
-            toggleThemeBtn.setAttribute('title', locales[lang].toggleThemeBtnKey); // "Switch to Dark Mode"
-        } else {
-            icon.classList.remove('fa-moon');
-            icon.classList.add('fa-sun');
-            toggleThemeBtn.setAttribute('title', locales[lang].toggleThemeBtnKey); // "Switch to Light Mode"
-        }
-    };
-
-    // --- 6. معالجات الأحداث ---
-
-    // Main search input in header
-    mainInputHeader.addEventListener('input', () => {
-        mainInput.value = mainInputHeader.value; // Sync with main input
-        updateQueryPreviewAndUrl();
-    });
-    searchBtnHeader.addEventListener('click', () => {
-        searchNowBtn.click(); // Trigger main search button
+    navButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetScreenId = button.id.replace('nav-', '') + '-screen';
+            screens.forEach(screen => screen.classList.remove('active'));
+            document.getElementById(targetScreenId).classList.add('active');
+            navButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            if (targetScreenId === 'history-screen') loadHistory();
+            if (targetScreenId === 'favorites-screen') loadFavorites();
+        });
     });
 
-    // Main search input in center content
-    mainInput.addEventListener('input', () => {
-        mainInputHeader.value = mainInput.value; // Sync with header input
-        updateQueryPreviewAndUrl();
-    });
-
-    // Source chips selection
-    sourceChips.forEach(chip => {
-        chip.addEventListener('change', updateQueryPreviewAndUrl);
-    });
-
-    selectAllSourcesBtn.addEventListener('click', () => {
-        sourceChips.forEach(chip => chip.checked = true);
-        updateQueryPreviewAndUrl();
-    });
-
-    clearAllSourcesBtn.addEventListener('click', () => {
-        sourceChips.forEach(chip => chip.checked = false);
-        updateQueryPreviewAndUrl();
-    });
-
-    // Filter inputs
-    filetypeFilter.addEventListener('change', (e) => { queryState.filetype = e.target.value; updateQueryPreviewAndUrl(); });
-    domainFilter.addEventListener('change', (e) => { queryState.domain = e.target.value; updateQueryPreviewAndUrl(); });
-    yearFilter.addEventListener('input', (e) => { queryState.year = e.target.value; updateQueryPreviewAndUrl(); });
-    languageFilter.addEventListener('change', (e) => { queryState.language = e.target.value; updateQueryPreviewAndUrl(); });
-    excludeFilter.addEventListener('input', (e) => { queryState.exclude = e.target.value; updateQueryPreviewAndUrl(); });
-
-    // Modal save button (for old command modal)
-    modalSaveBtn.addEventListener('click', () => {
-        queryState[currentCommand] = modalInput.value.trim();
-        updateQueryPreviewAndUrl();
-        closeModal();
-    });
-
-    // Close buttons for modals
+    [mainInput, searchEngineSelect].forEach(el => el.addEventListener('input', updateQueryPreviewAndUrl));
+    commandButtons.forEach(button => button.addEventListener('click', () => openModal(button.dataset.command)));
+    modalSaveBtn.addEventListener('click', () => { queryState[currentCommand] = modalInput.value.trim(); updateQueryPreviewAndUrl(); closeModal(); });
     closeBtns.forEach(btn => btn.addEventListener('click', closeModal));
-    window.addEventListener('click', (e) => {
-        if (e.target === commandModal || e.target === favoriteNameModal) closeModal();
-    });
+    window.addEventListener('click', (e) => { if (e.target === commandModal || e.target === favoriteNameModal) closeModal(); });
 
-    // Copy URL button
-    copyUrlBtn.addEventListener('click', () => {
-        if (!finalUrlInput.value) return;
-        finalUrlInput.select();
-        document.execCommand('copy');
-        alert(locales[localStorage.getItem('language') || 'ar'].urlCopied);
-    });
-
-    // Reset Query button
-    resetQueryBtn.addEventListener('click', () => {
-        queryState = { keywords: '', sources: [], filetype: '', domain: '', year: '', language: '', exclude: '', exact: '', intitle: '' };
-        mainInput.value = '';
-        mainInputHeader.value = '';
-        sourceChips.forEach(chip => chip.checked = false); // Uncheck all sources
-        filetypeFilter.value = '';
-        domainFilter.value = '';
-        yearFilter.value = '';
-        languageFilter.value = '';
-        excludeFilter.value = '';
-        updateQueryPreviewAndUrl();
-    });
-
-    // Search Now button
-    searchNowBtn.addEventListener('click', () => {
-        if (!queryState.keywords) {
-            alert(locales[localStorage.getItem('language') || 'ar'].queryEmpty);
-            return;
-        }
-        // In a real application, you would iterate through queryState.sources
-        // and open a new tab for each, or fetch results via API.
-        // For this example, we'll just open the first source's URL.
-        if (queryState.sources.length > 0) {
-            window.open(queryState.sources[0].url, '_blank');
-            saveToHistory();
-            // Simulate loading results (replace with actual API calls)
-            simulateSearchResults(queryState.keywords, queryState.sources[0].name);
-        } else {
-            alert("Please select at least one search source."); // New message
-        }
-    });
-
-    // Theme toggle button
-    toggleThemeBtn.addEventListener('click', () => {
-        const currentTheme = localStorage.getItem('theme') || 'light';
-        applyTheme(currentTheme === 'light' ? 'dark' : 'light');
-    });
-
-    // Language select
+    copyUrlBtn.addEventListener('click', () => { if(!finalUrlInput.value) return; finalUrlInput.select(); document.execCommand('copy'); alert(locales[localStorage.getItem('language') || 'ar'].urlCopied); });
+    resetQueryBtn.addEventListener('click', () => { queryState = { keywords: '', site: '', filetype: '', exclude: '', exact: '', intitle: '' }; mainInput.value = ''; updateQueryPreviewAndUrl(); });
+    searchNowBtn.addEventListener('click', () => { if (!finalUrlInput.value || !queryState.keywords) { alert(locales[localStorage.getItem('language') || 'ar'].queryEmpty); return; } window.open(finalUrlInput.value, '_blank'); saveToHistory(); });
+    toggleThemeBtn.addEventListener('click', () => { const currentTheme = localStorage.getItem('theme') || 'light'; applyTheme(currentTheme === 'light' ? 'dark' : 'light'); });
     langSelect.addEventListener('change', () => setLanguage(langSelect.value));
 
-    // --- 7. وظائف Firebase (History & Favorites) ---
-    const saveToHistory = async () => {
-        try {
-            // Save the first selected source's name and URL for history display
-            const selectedEngineName = queryState.sources.length > 0 ? queryState.sources[0].name : 'N/A';
-            const selectedEngineUrl = queryState.sources.length > 0 ? queryState.sources[0].url : 'N/A';
-
-            await db.collection('Searches').add({
-                deviceId: deviceId,
-                queryData: queryState, // Save full queryState
-                queryText: previewExplanation.textContent,
-                engine: selectedEngineName,
-                url: selectedEngineUrl,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
-        } catch (error) {
-            console.error("Error saving to history: ", error);
-        }
+    const saveToHistory = async () => { try { await db.collection('Searches').add({ deviceId: deviceId, queryData: queryState, queryText: previewExplanation.textContent, engine: searchEngineSelect.options[searchEngineSelect.selectedIndex].dataset.name, url: finalUrlInput.value, createdAt: firebase.firestore.FieldValue.serverTimestamp() }); } catch (error) { console.error("Error saving to history: ", error); } };
+    
+    const renderList = (element, collectionName, docs, emptyKey, renderer) => { 
+        const lang = localStorage.getItem('language') || 'ar'; 
+        if (docs.empty) { element.innerHTML = `<div class="card">${locales[lang][emptyKey]}</div>`; return; } 
+        element.innerHTML = ''; 
+        docs.forEach(doc => renderer(doc, lang)); 
+    };
+    
+    const loadHistory = async () => { 
+        const snapshot = await db.collection('Searches').where('deviceId', '==', deviceId).orderBy('createdAt', 'desc').limit(30).get(); 
+        renderList(historyList, 'Searches', snapshot, 'historyEmpty', (doc, lang) => { 
+            const data = doc.data(); 
+            const date = data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleString(lang) : ''; 
+            const item = document.createElement('div'); 
+            item.className = 'list-item card'; 
+            item.innerHTML = `<h4>${data.queryData.keywords}</h4> <p class="query-text">${data.queryText}</p> <p class="meta-info">${locales[lang].engineLabel}: ${data.engine} | ${date}</p> <div class="item-actions"> <button onclick="window.open('${data.url}', '_blank')">${locales[lang].reSearch}</button> <button class="delete-item" data-collection="Searches" data-id="${doc.id}">${locales[lang].delete}</button> </div>`; 
+            historyList.appendChild(item); 
+        }); 
+    };
+    
+    const loadFavorites = async () => { 
+        const snapshot = await db.collection('Favorites').where('deviceId', '==', deviceId).orderBy('createdAt', 'desc').get(); 
+        renderList(favoritesList, 'Favorites', snapshot, 'favoritesEmpty', (doc, lang) => { 
+            const data = doc.data(); 
+            const item = document.createElement('div'); 
+            item.className = 'list-item card'; 
+            item.innerHTML = `<h4>${data.queryName}</h4> <p class="meta-info">${locales[lang].engineLabel}: ${data.engine}</p> <div class="item-actions"> <button class="apply-favorite" data-id="${doc.id}">${locales[lang].apply}</button> <button class="delete-item" data-collection="Favorites" data-id="${doc.id}">${locales[lang].delete}</button> </div>`; 
+            favoritesList.appendChild(item); 
+        }); 
     };
 
-    const renderList = (element, collectionName, docs, emptyKey, renderer) => {
-        const lang = localStorage.getItem('language') || 'ar';
-        if (docs.empty) {
-            element.innerHTML = `<div class="card empty-list-message">${locales[lang][emptyKey]}</div>`;
-            return;
-        }
-        element.innerHTML = '';
-        docs.forEach(doc => renderer(doc, lang));
-    };
-
-    const loadHistory = async () => {
-        const snapshot = await db.collection('Searches').where('deviceId', '==', deviceId).orderBy('createdAt', 'desc').limit(30).get();
-        renderList(historyList, 'Searches', snapshot, 'historyEmpty', (doc, lang) => {
-            const data = doc.data();
-            const date = data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleString(lang) : '';
-            const item = document.createElement('div');
-            item.className = 'list-item card';
-            item.innerHTML = `
-                <h4>${data.queryData.keywords || 'No Keywords'}</h4>
-                <p class="query-text">${data.queryText}</p>
-                <p class="meta-info">${locales[lang].engineLabel}: ${data.engine} | ${date}</p>
-                <div class="item-actions">
-                    <button class="btn-secondary-sm" onclick="window.open('${data.url}', '_blank')">${locales[lang].reSearch}</button>
-                    <button class="btn-secondary-sm delete-item" data-collection="Searches" data-id="${doc.id}">${locales[lang].delete}</button>
-                </div>
-            `;
-            historyList.appendChild(item);
-        });
-    };
-
-    const loadFavorites = async () => {
-        const snapshot = await db.collection('Favorites').where('deviceId', '==', deviceId).orderBy('createdAt', 'desc').get();
-        renderList(favoritesList, 'Favorites', snapshot, 'favoritesEmpty', (doc, lang) => {
-            const data = doc.data();
-            const item = document.createElement('div');
-            item.className = 'list-item card';
-            item.innerHTML = `
-                <h4>${data.queryName}</h4>
-                <p class="meta-info">${locales[lang].engineLabel}: ${data.engine}</p>
-                <div class="item-actions">
-                    <button class="btn-secondary-sm apply-favorite" data-id="${doc.id}">${locales[lang].apply}</button>
-                    <button class="btn-secondary-sm delete-item" data-collection="Favorites" data-id="${doc.id}">${locales[lang].delete}</button>
-                </div>
-            `;
-            favoritesList.appendChild(item);
-        });
-    };
-
-    addToFavoritesBtn.addEventListener('click', () => {
-        if (!queryState.keywords) {
-            alert(locales[localStorage.getItem('language') || 'ar'].queryEmpty);
-            return;
-        }
-        favoriteNameModal.style.display = 'flex';
-        favoriteNameInput.focus();
+    addToFavoritesBtn.addEventListener('click', () => { if (!queryState.keywords) { alert(locales[localStorage.getItem('language') || 'ar'].queryEmpty); return; } favoriteNameModal.style.display = 'flex'; favoriteNameInput.focus(); });
+    
+    saveFavoriteBtn.addEventListener('click', async () => { 
+        const name = favoriteNameInput.value.trim(); 
+        if (!name) { alert(locales[localStorage.getItem('language') || 'ar'].favoriteNameMissing); return; } 
+        await db.collection('Favorites').add({ deviceId: deviceId, queryName: name, queryData: queryState, engine: searchEngineSelect.options[searchEngineSelect.selectedIndex].dataset.name, engineValue: searchEngineSelect.value, createdAt: firebase.firestore.FieldValue.serverTimestamp() }); 
+        favoriteNameInput.value = ''; 
+        closeModal(); 
+        if(favoritesList.parentElement.parentElement.classList.contains('active')) loadFavorites(); 
     });
-
-    saveFavoriteBtn.addEventListener('click', async () => {
-        const name = favoriteNameInput.value.trim();
-        if (!name) {
-            alert(locales[localStorage.getItem('language') || 'ar'].favoriteNameMissing);
-            return;
-        }
-        // Save the first selected source's name and URL for favorites display
-        const selectedEngineName = queryState.sources.length > 0 ? queryState.sources[0].name : 'N/A';
-        const selectedEngineValue = queryState.sources.length > 0 ? queryState.sources[0].url : 'N/A'; // Use URL as value
-
-        await db.collection('Favorites').add({
-            deviceId: deviceId,
-            queryName: name,
-            queryData: queryState, // Save full queryState
-            engine: selectedEngineName,
-            engineValue: selectedEngineValue,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
-        favoriteNameInput.value = '';
-        closeModal();
-        loadFavorites(); // Reload favorites list
-    });
-
-    clearHistoryBtn.addEventListener('click', async () => {
-        if (confirm(locales[localStorage.getItem('language') || 'ar'].confirmClearHistory)) {
-            const snapshot = await db.collection('Searches').where('deviceId', '==', deviceId).get();
-            const batch = db.batch();
-            snapshot.forEach(doc => batch.delete(doc.ref));
-            await batch.commit();
-            loadHistory();
-        }
+    
+    clearHistoryBtn.addEventListener('click', async () => { 
+        if (confirm(locales[localStorage.getItem('language') || 'ar'].confirmClearHistory)) { 
+            const snapshot = await db.collection('Searches').where('deviceId', '==', deviceId).get(); 
+            const batch = db.batch(); 
+            snapshot.forEach(doc => batch.delete(doc.ref)); 
+            await batch.commit(); 
+            loadHistory(); 
+        } 
     });
 
     document.addEventListener('click', async (e) => {
         const lang = localStorage.getItem('language') || 'ar';
-        if (e.target.matches('.delete-item')) {
-            if (confirm(locales[lang].confirmDelete)) {
-                const { collection, id } = e.target.dataset;
-                await db.collection(collection).doc(id).delete();
-                if (collection === 'Searches') loadHistory();
-                else loadFavorites();
-            }
+        if (e.target.closest('.delete-item')) { 
+            const button = e.target.closest('.delete-item');
+            if (confirm(locales[lang].confirmDelete)) { 
+                const { collection, id } = button.dataset; 
+                await db.collection(collection).doc(id).delete(); 
+                if (collection === 'Searches') loadHistory(); 
+                else loadFavorites(); 
+            } 
         }
-        if (e.target.matches('.apply-favorite')) {
-            const doc = await db.collection('Favorites').doc(e.target.dataset.id).get();
-            if (doc.exists) {
-                const data = doc.data();
-                queryState = data.queryData; // Restore full query state
-                mainInput.value = queryState.keywords || '';
-                mainInputHeader.value = queryState.keywords || '';
-
-                // Restore source selections
-                sourceChips.forEach(chip => {
-                    chip.checked = queryState.sources.some(s => s.name === chip.value);
-                });
-
-                // Restore filter values
-                filetypeFilter.value = queryState.filetype || '';
-                domainFilter.value = queryState.domain || '';
-                yearFilter.value = queryState.year || '';
-                languageFilter.value = queryState.language || '';
-                excludeFilter.value = queryState.exclude || '';
-
-                updateQueryPreviewAndUrl();
-                // No screen navigation needed as we are already on the main screen
-            }
+        if (e.target.closest('.apply-favorite')) { 
+            const button = e.target.closest('.apply-favorite');
+            const doc = await db.collection('Favorites').doc(button.dataset.id).get(); 
+            if (doc.exists) { 
+                const data = doc.data(); 
+                queryState = data.queryData; 
+                mainInput.value = queryState.keywords || ''; 
+                searchEngineSelect.value = data.engineValue; 
+                updateQueryPreviewAndUrl(); 
+                document.getElementById('nav-main').click(); 
+            } 
         }
     });
-
-    // --- 8. وظائف تصدير البيانات ---
-    const downloadFile = (data, filename, type) => {
-        const blob = new Blob([data], { type });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = filename;
+    
+    const downloadFile = (data, filename, type) => { 
+        const blob = new Blob([data], { type }); 
+        const link = document.createElement('a'); 
+        link.href = URL.createObjectURL(blob); 
+        link.download = filename; 
         document.body.appendChild(link);
-        link.click();
+        link.click(); 
         document.body.removeChild(link);
-        URL.revokeObjectURL(link.href);
+        URL.revokeObjectURL(link.href); 
     };
 
-    // Export JSON and CSV buttons (assuming they are in settings, not explicitly in new HTML)
-    // You'll need to add these buttons back to the settings section if you want them.
-    // For now, I'll comment out their event listeners.
-    /*
-    exportJsonBtn.addEventListener('click', async () => {
+    exportJsonBtn.addEventListener('click', async () => { 
         const historySnapshot = await db.collection('Searches').where('deviceId', '==', deviceId).get();
         const favoritesSnapshot = await db.collection('Favorites').where('deviceId', '==', deviceId).get();
         const history = historySnapshot.docs.map(doc => doc.data());
         const favorites = favoritesSnapshot.docs.map(doc => doc.data());
-        downloadFile(JSON.stringify({ history, favorites }, null, 2), 'academic_search_data.json', 'application/json');
+        downloadFile(JSON.stringify({ history, favorites }, null, 2), 'academic_search_data.json', 'application/json'); 
     });
 
-    exportCsvBtn.addEventListener('click', async () => {
-        const snapshot = await db.collection('Searches').where('deviceId', '==', deviceId).get();
-        let csv = "Keywords,QueryText,Engine,URL,CreatedAt\n";
-        snapshot.forEach(doc => {
-            const d = doc.data();
+    exportCsvBtn.addEventListener('click', async () => { 
+        const snapshot = await db.collection('Searches').where('deviceId', '==', deviceId).get(); 
+        let csv = "Keywords,QueryText,Engine,URL,CreatedAt\n"; 
+        snapshot.forEach(doc => { 
+            const d = doc.data(); 
             const row = [
-                `"${(d.queryData.keywords || '').replace(/"/g, '""')}"`,
-                `"${d.queryText.replace(/"/g, '""')}"`,
-                d.engine,
-                d.url,
+                `"${(d.queryData.keywords || '').replace(/"/g, '""')}"`, 
+                `"${d.queryText.replace(/"/g, '""')}"`, 
+                d.engine, 
+                d.url, 
                 d.createdAt ? new Date(d.createdAt.seconds * 1000).toISOString() : ''
-            ].join(',');
-            csv += row + "\n";
-        });
-        downloadFile(csv, 'search_history.csv', 'text/csv;charset=utf-8;');
-    });
-    */
-
-    // --- 9. وظائف محاكاة النتائج (للتوضيح فقط) ---
-    const simulateSearchResults = (keywords, sourceName) => {
-        searchResultsList.innerHTML = ''; // Clear previous results
-        const lang = localStorage.getItem('language') || 'ar';
-        const dummyResults = [
-            { title: `بحث حول ${keywords} في ${sourceName}`, authors: "أحمد، محمد", journal: "مجلة العلوم", year: "2024", filetype: "PDF", snippet: "ملخص قصير يصف محتوى البحث، يظهر هنا لمساعدة المستخدم على فهم ما إذا كانت النتيجة ذات صلة.", url: "https://example.com/doc1.pdf" },
-            { title: `دراسة حالة عن ${keywords} في ${sourceName}`, authors: "فاطمة، زينب", journal: "المؤتمر الدولي", year: "2023", filetype: "HTML", snippet: "ملخص قصير يصف محتوى البحث، يظهر هنا لمساعدة المستخدم على فهم ما إذا كانت النتيجة ذات صلة.", url: "https://example.com/doc2.html" },
-            { title: `تحليل ${keywords} وتأثيره`, authors: "علي، سارة", journal: "رسالة دكتوراه", year: "2022", filetype: "DOC", snippet: "ملخص قصير يصف محتوى البحث، يظهر هنا لمساعدة المستخدم على فهم ما إذا كانت النتيجة ذات صلة.", url: "https://example.com/doc3.doc" },
-        ];
-
-        dummyResults.forEach(result => {
-            const item = document.createElement('div');
-            item.className = 'card result-item';
-            item.innerHTML = `
-                <h3 class="result-title"><a href="${result.url}" target="_blank">${result.title}</a></h3>
-                <p class="result-meta">${result.authors} • ${result.journal} • ${result.year}</p>
-                <div class="result-badges">
-                    <span class="badge">${result.filetype}</span>
-                    <span class="badge">${sourceName}</span>
-                </div>
-                <p class="result-snippet">${result.snippet}</p>
-                <div class="result-actions">
-                    <a href="${result.url}" target="_blank" class="btn-primary-sm"><i class="fas fa-external-link-alt"></i> ${lang === 'ar' ? 'فتح المصدر' : 'Open Source'}</a>
-                    <button class="btn-secondary-sm"><i class="fas fa-bookmark"></i> ${lang === 'ar' ? 'حفظ' : 'Save'}</button>
-                    <button class="btn-secondary-sm"><i class="fas fa-share-alt"></i> ${lang === 'ar' ? 'مشاركة' : 'Share'}</button>
-                </div>
-            `;
-            searchResultsList.appendChild(item);
-        });
-        loadMoreBtn.style.display = 'block'; // Show load more button
-    };
-
-    loadMoreBtn.addEventListener('click', () => {
-        // Simulate loading more results
-        const lang = localStorage.getItem('language') || 'ar';
-        const currentKeywords = queryState.keywords || "نتائج إضافية";
-        const currentSource = queryState.sources.length > 0 ? queryState.sources[0].name : "مصدر غير محدد";
-        simulateSearchResults(currentKeywords, currentSource); // Append more results
+            ].join(','); 
+            csv += row + "\n"; 
+        }); 
+        downloadFile(csv, 'search_history.csv', 'text/csv;charset=utf-8;'); 
     });
 
-
-    // --- 10. التهيئة الأولية ---
     const initialLang = localStorage.getItem('language') || 'ar';
     setLanguage(initialLang);
     const initialTheme = localStorage.getItem('theme') || 'light';
     applyTheme(initialTheme);
-
-    // Load history and favorites on initial load
-    loadHistory();
-    loadFavorites();
 });
