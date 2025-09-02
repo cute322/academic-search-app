@@ -8,7 +8,7 @@
 :root {
     --primary-color: #3B82F6;      /* Vibrant Blue */
     --primary-hover: #2563EB;      /* Darker Blue */
-    --background-color: #F8F9FA;  /* Clean Light Gray */
+    --background-color: #EFF2F7;
     --surface-color: #FFFFFF;     /* White */
     --text-color: #1F2937;        /* Dark Charcoal */
     --muted-text-color: #6B7280;  /* Medium Gray */
@@ -197,6 +197,71 @@ input[type="text"]:focus, select:focus {
     border-color: var(--primary-color);
     color: white;
 }
+/* --- Modern Settings & Modal Buttons --- */
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* تصميم موحد لكل الأزرار داخل الإعدادات */
+.setting-item button, .setting-item div button {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    padding: 10px 20px;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-speed) ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.setting-item button:hover, .setting-item div button:hover {
+    border-color: var(--primary-color);
+    background-color: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* تمييز زر الحذف بلون الخطر */
+.setting-item .danger-btn {
+    background-color: var(--danger-color);
+    border-color: var(--danger-color);
+    color: white;
+}
+
+.setting-item .danger-btn:hover {
+    background-color: var(--danger-hover);
+    border-color: var(--danger-hover);
+}
+
+/* تصميم أزرار الاختيارات المسبقة (PDF, DOCX) في النافذة المنبثقة */
+#modal-predefined-choices {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 1rem;
+}
+
+.predefined-choice-btn {
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    padding: 8px 16px;
+    border-radius: 50px; /* شكل دائري مثل الـ "Pills" */
+    cursor: pointer;
+    font-weight: 500;
+    transition: all var(--transition-speed) ease;
+}
+
+.predefined-choice-btn:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
 
 /* --- Footer --- */
 footer { background: var(--surface-color); color: var(--muted-text-color); padding: 3rem 0; margin-top: 4rem; border-top: 1px solid var(--border-color); text-align: center; }
@@ -221,4 +286,18 @@ footer a:hover { color: var(--primary-hover); text-decoration: underline; }
     .card { padding: 1.5rem; }
     h2 { font-size: 1.75rem; }
     .command-buttons { grid-template-columns: repeat(2, 1fr); }
+}
+/* --- Fix for Select Dropdown Overflow --- */
+select#search-engine {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: left 1rem center;
+    background-size: 1em;
+    padding-inline-start: 2.5rem; /* مسافة للأيقونة */
+}
+.dark-theme select#search-engine {
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238B949E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
 }
