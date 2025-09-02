@@ -3,170 +3,192 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مساعد البحث الأكاديمي | Barmaja - أداة بناء استعلامات البحث المتقدم</title>
-    <meta name="description" content="أداة ويب مجانية من Barmaja تساعد الطلاب والباحثين على إنشاء استعلامات بحث أكاديمي دقيقة ومتقدمة بسهولة. قم ببناء بحثك في Google Scholar و PubMed وغيرها بدلاً من كتابة الأوامر المعقدة.">
+    <title>Academic Search | أداة البحث الأكاديمي</title>
+    <meta name="description" content="Academic Search App منصة تساعد الباحثين والطلبة على صياغة استعلامات بحثية دقيقة عبر محركات بحث أكاديمية موثوقة مثل Google Scholar, ResearchGate, Semantic Scholar...">
     <meta name="author" content="Dalila Cherif Slimane - Barmaja">
-    <meta name="keywords" content="مساعد البحث الأكاديمي, أداة بحث علمي, بناء استعلامات البحث, صياغة استعلامات جوجل, بحث متقدم للطلاب, باحث جوجل العلمي, أدوات الباحثين, academic search helper, research query builder, advanced search tool, Google Scholar, Barmaja, Dalila Cherif Slimane">
+    <meta name="keywords" content="بحث أكاديمي, أداة بحث علمي, بناء استعلامات البحث, صياغة استعلامات جوجل, بحث متقدم للطلاب, باحث جوجل العلمي, أدوات الباحثين, academic search, research query builder, advanced search tool, Google Scholar, PubMed, ResearchGate, Semantic Scholar, Barmaja, Dalila Cherif Slimane">
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <meta name="google-site-verification" content="0KOS6T1ypdZGkL3466YNKiJybzPNQ5Jr2tCnhkOulUE" />
     <link rel="alternate" hreflang="ar" href="https://academic-search-app.netlify.app/" />
     <link rel="alternate" hreflang="en" href="https://academic-search-app.netlify.app/" />
     <link rel="alternate" hreflang="x-default" href="https://academic-search-app.netlify.app/" />
-    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Google Fonts: Inter & Roboto -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="light-theme">
 
-    <header>
+    <header class="sticky-header">
         <nav class="container">
-            <div class="logo" data-lang-key="appTitle">مساعد البحث الأكاديمي</div>
+            <div class="logo" data-lang-key="appTitle">Academic Search</div>
             <div class="nav-links">
-                <button id="nav-main" class="nav-btn active" data-lang-key="navMain">الرئيسية</button>
+                <button id="nav-home" class="nav-btn active" data-lang-key="navHome">الرئيسية</button>
+                <button id="nav-about" class="nav-btn" data-lang-key="navAbout">حول</button>
+                <button id="nav-contact" class="nav-btn" data-lang-key="navContact">اتصل بنا</button>
                 <button id="nav-history" class="nav-btn" data-lang-key="navHistory">السجلّ</button>
                 <button id="nav-favorites" class="nav-btn" data-lang-key="navFavorites">المفضلة</button>
-                <button id="nav-settings" class="nav-btn" data-lang-key="navSettings">الإعدادات</button>
             </div>
-            <div class="language-switcher">
-                <select id="lang-select">
-                    <option value="ar">العربية</option>
-                    <option value="en">English</option>
-                </select>
+            <div class="header-actions">
+                <button id="toggle-theme-btn" class="icon-btn" data-lang-key="toggleThemeBtnKey"><i class="fas fa-moon"></i></button>
+                <div class="language-switcher">
+                    <select id="lang-select">
+                        <option value="ar">العربية</option>
+                        <option value="en">English</option>
+                    </select>
+                </div>
             </div>
         </nav>
     </header>
 
     <main>
-        <section id="main-screen" class="screen active">
-            <div class="container">
-                <div class="search-engine-selector card">
-                    <label for="search-engine" data-lang-key="searchEngineLabel">اختر محرك البحث:</label>
-                    <select id="search-engine">
-    <optgroup label="محركات بحث أكاديمية عالمية">
-        <option value="https://scholar.google.com/scholar?q=" data-name="Google Scholar">Google Scholar</option>
-        <option value="https://www.bing.com/search?q=" data-name="Bing Academic">Bing Academic</option>
-        <option value="https://www.semanticscholar.org/search?q=" data-name="Semantic Scholar">Semantic Scholar</option>
-        <option value="https://www.base-search.net/Search/Results?lookfor=" data-name="BASE">BASE Search Engine</option>
-        <option value="https://core.ac.uk/search?q=" data-name="CORE">CORE</option>
-        <option value="https://worldwidescience.org/wws/desktop/en/search.html?searchterm=" data-name="WorldWideScience">WorldWideScience</option>
-        <option value="https://www.refseek.com/search?q=" data-name="RefSeek">RefSeek</option>
-        <option value="https://www.science.gov/scigov/desktop/en/search.html?searchterm=" data-name="Science.gov">Science.gov</option>
-        <option value="https://www.researchgate.net/search/publication?q=" data-name="ResearchGate">ResearchGate</option>
-        <option value="https://www.academia.edu/search?q=" data-name="Academia.edu">Academia.edu</option>
-    </optgroup>
-    <optgroup label="محركات متخصصة حسب المجال">
-        <option value="https://pubmed.ncbi.nlm.nih.gov/?term=" data-name="PubMed">PubMed (الطب وعلوم الحياة)</option>
-        <option value="https://ieeexplore.ieee.org/search/searchresult.jsp?queryText=" data-name="IEEE Xplore">IEEE Xplore (الهندسة والإعلام الآلي)</option>
-        <option value="https://eric.ed.gov/?q=" data-name="ERIC">ERIC (التعليم والتربية)</option>
-        <option value="https://arxiv.org/search/?query=" data-name="ArXiv">ArXiv (الفيزياء والرياضيات)</option>
-        <option value="https://www.jstor.org/action/doBasicSearch?Query=" data-name="JSTOR">JSTOR (العلوم الإنسانية والاجتماعية)</option>
-        <option value="https://papers.ssrn.com/sol3/results.cfm?txtKey_Words=" data-name="SSRN">SSRN (الاقتصاد والقانون)</option>
-    </optgroup>
-</select>
+        <!-- Home Screen (Main Search & Results) -->
+        <section id="home-screen" class="screen active">
+            <div class="container hero-section">
+                <h1 data-lang-key="heroTitle">ابحث عن المعرفة الأكاديمية</h1>
+                <div class="main-search-box">
+                    <input type="text" id="main-input" data-lang-key="mainInputPlaceholder" placeholder="اكتب كلماتك المفتاحية للبحث الأكاديمي...">
+                    <button id="search-now-btn" class="primary-btn" data-lang-key="searchBtn"><i class="fas fa-search"></i> بحث</button>
                 </div>
+                <div class="advanced-options">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="exact-match-checkbox">
+                        <span class="checkmark"></span>
+                        <span data-lang-key="exactMatch">بحث مطابق</span>
+                    </label>
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="exclude-word-checkbox">
+                        <span class="checkmark"></span>
+                        <span data-lang-key="excludeWord">استبعاد كلمة</span>
+                    </label>
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="site-search-checkbox">
+                        <span class="checkmark"></span>
+                        <span data-lang-key="siteSearch">بحث داخل موقع محدد</span>
+                    </label>
+                </div>
+            </div>
 
-                <div class="query-builder-grid">
-                    <div class="search-box card">
-                        <input type="text" id="main-input" data-lang-key="mainInputPlaceholder" placeholder="اكتب الكلمات المفتاحية الأساسية هنا...">
-                        <div class="command-buttons">
-                            <button class="command-btn" data-command="site" data-lang-key="cmdSite">البحث داخل موقع</button>
-                            <button class="command-btn" data-command="filetype" data-lang-key="cmdFiletype">تحديد نوع الملف</button>
-                            <button class="command-btn" data-command="exclude" data-lang-key="cmdExclude">استبعاد كلمة</button>
-                            <button class="command-btn" data-command="exact" data-lang-key="cmdExact">بحث مطابق</button>
-                            <button class="command-btn" data-command="intitle" data-lang-key="cmdIntitle">كلمة في العنوان</button>
+            <div id="results-section" class="container results-layout" style="display: none;">
+                <aside class="sidebar filter-sidebar">
+                    <h3 data-lang-key="filterTitle">فلترة النتائج</h3>
+                    <div class="filter-group">
+                        <label for="filetype-filter" data-lang-key="filetypeFilter">نوع الملف:</label>
+                        <select id="filetype-filter">
+                            <option value="">الكل</option>
+                            <option value="pdf">PDF</option>
+                            <option value="docx">DOCX</option>
+                            <option value="html">HTML</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="date-filter" data-lang-key="dateFilter">التاريخ:</label>
+                        <select id="date-filter">
+                            <option value="">الكل</option>
+                            <option value="last-year">آخر سنة</option>
+                            <option value="last-5-years">آخر 5 سنوات</option>
+                            <option value="custom">تاريخ مخصص</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="specialization-filter" data-lang-key="specializationFilter">التخصص:</label>
+                        <select id="specialization-filter">
+                            <option value="">الكل</option>
+                            <option value="social-sciences">علوم اجتماعية</option>
+                            <option value="medicine">طب</option>
+                            <option value="engineering">هندسة</option>
+                            <!-- Add more specializations -->
+                        </select>
+                    </div>
+                    <button id="apply-filters-btn" class="primary-btn small-btn" data-lang-key="applyFilters">تطبيق الفلاتر</button>
+                </aside>
+
+                <div class="results-content">
+                    <div id="search-results-list" class="results-grid">
+                        <!-- Search results will be dynamically loaded here -->
+                        <!-- Placeholder for results -->
+                        <div class="result-card skeleton-loader">
+                            <div class="skeleton-line title"></div>
+                            <div class="skeleton-line url"></div>
+                            <div class="skeleton-line snippet"></div>
+                            <div class="skeleton-line actions"></div>
+                        </div>
+                        <div class="result-card skeleton-loader">
+                            <div class="skeleton-line title"></div>
+                            <div class="skeleton-line url"></div>
+                            <div class="skeleton-line snippet"></div>
+                            <div class="skeleton-line actions"></div>
                         </div>
                     </div>
-
-                    <div class="query-preview-container card">
-                        <h3 data-lang-key="queryPreviewTitle">الاستعلام النهائي:</h3>
-                        <p id="preview-explanation" data-lang-key="queryPreviewPlaceholder">لم تقم بتكوين أي استعلام بعد.</p>
-                        
-                        <h3 data-lang-key="finalUrlTitle">رابط البحث:</h3>
-                        <div class="url-box">
-                            <input type="text" id="final-url" readonly>
-                            <button id="copy-url-btn" data-lang-key="copyBtn">نسخ</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="action-buttons">
-                    <button id="search-now-btn" class="primary-btn" data-lang-key="searchNowBtn">ابحث الآن</button>
-                    <button id="add-to-favorites-btn" data-lang-key="addToFavoritesBtn">أضف للمفضلة</button>
-                    <button id="reset-query-btn" data-lang-key="resetQueryBtn">إعادة تعيين</button>
+                    <button id="load-more-btn" class="primary-btn load-more-btn" style="display: none;" data-lang-key="loadMore">تحميل المزيد</button>
                 </div>
             </div>
         </section>
 
+        <!-- About Screen -->
+        <section id="about-screen" class="screen">
+            <div class="container content-card">
+                <h2 data-lang-key="aboutTitle">حول Academic Search</h2>
+                <p data-lang-key="aboutText">Academic Search App منصة تساعد الباحثين والطلبة على صياغة استعلامات بحثية دقيقة عبر محركات بحث أكاديمية موثوقة مثل Google Scholar, ResearchGate, Semantic Scholar. تهدف المنصة إلى تبسيط عملية البحث الأكاديمي وتوفير أدوات فعالة للوصول إلى المعلومات العلمية بسهولة ويسر.</p>
+            </div>
+        </section>
+
+        <!-- Contact Screen -->
+        <section id="contact-screen" class="screen">
+            <div class="container content-card">
+                <h2 data-lang-key="contactTitle">اتصل بنا</h2>
+                <form class="contact-form">
+                    <div class="form-group">
+                        <label for="contact-name" data-lang-key="contactName">الاسم:</label>
+                        <input type="text" id="contact-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-email" data-lang-key="contactEmail">البريد الإلكتروني:</label>
+                        <input type="email" id="contact-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-message" data-lang-key="contactMessage">الرسالة:</label>
+                        <textarea id="contact-message" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="primary-btn" data-lang-key="sendMessage">إرسال الرسالة</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- History Screen -->
         <section id="history-screen" class="screen">
-            <div class="container">
+            <div class="container content-card">
                 <h2 data-lang-key="historyTitle">سجلّ البحث</h2>
                 <div id="history-list" class="data-list"></div>
+                <button id="clear-history-btn" class="danger-btn mt-3" data-lang-key="clearHistoryBtn">مسح السجلّ</button>
             </div>
         </section>
 
+        <!-- Favorites Screen -->
         <section id="favorites-screen" class="screen">
-            <div class="container">
+            <div class="container content-card">
                 <h2 data-lang-key="favoritesTitle">الاستعلامات المفضلة</h2>
                 <div id="favorites-list" class="data-list"></div>
-            </div>
-        </section>
-
-        <section id="settings-screen" class="screen">
-            <div class="container">
-                <h2 data-lang-key="settingsTitle">الإعدادات</h2>
-                <div class="setting-item card">
-                    <p data-lang-key="themeSetting">تغيير المظهر
-                    </p>
-                    <button id="toggle-theme-btn" data-lang-key="toggleThemeBtnKey">التبديل إلى الوضع المظلم</button>
-                </div>
-                <div class="setting-item card">
-                    <p data-lang-key="clearHistorySetting">مسح سجل البحث</p>
-                    <button id="clear-history-btn" class="danger-btn" data-lang-key="clearHistoryBtn">مسح السجلّ</button>
-                </div>
-                <div class="setting-item card">
-                    <p data-lang-key="exportDataSetting">تصدير البيانات</p>
-                    <div>
-                        <button id="export-json-btn" data-lang-key="exportJsonBtn">تصدير إلى JSON</button>
-                        <button id="export-csv-btn" data-lang-key="exportCsvBtn">تصدير إلى CSV</button>
-                    </div>
-                </div>
             </div>
         </section>
     </main>
 
     <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="dev-info">
-                    <h4>للتواصل مع المطورة</h4>
-                    <p><strong>الاسم:</strong> دليلة شريف سليمان</p>
-                    <p><strong>البريد الإلكتروني:</strong> <a href="mailto:barmajawebb@gmail.com">barmajawebb@gmail.com</a></p>
-                    <p><strong>الصفحة:</strong> <a href="https://www.facebook.com/share/1B3sVo5ReG/" target="_blank" rel="noopener noreferrer">Barmaja on Facebook</a></p>
-                </div>
-                <div class="legal-info">
-                    <h4>الحقوق والأمان</h4>
-                    <p>هذا الموقع محمي بموجب حقوق الملكية الفكرية وهو ملكية خاصة للمطورة. لا يحق نسخ، تعديل، أو استخدام الكود البرمجي والتصميم لأي غرض كان دون إذن خطي مسبق.</p>
-                    <p class="privacy-terms">شروط الاستخدام - سياسة الخصوصية</p>
-                </div>
-            </div>
-            <div class="copyright-info">
-                <p>© 2025 Dalila Cherif Slimane - جميع الحقوق محفوظة.</p>
-                <p>الإصدار 1.0 (تاريخ الإصدار: سبتمبر 2025)</p>
+        <div class="container footer-content">
+            <p data-lang-key="copyrightText">© 2025 Academic Search. جميع الحقوق محفوظة.</p>
+            <div class="footer-links">
+                <a href="#" data-lang-key="privacyPolicy">سياسة الخصوصية</a>
+                <a href="#" data-lang-key="termsOfUse">شروط الاستخدام</a>
             </div>
         </div>
     </footer>
 
-    <div id="command-modal" class="modal">
-        <div class="modal-content card">
-            <span class="close-btn">&times;</span>
-            <h3 id="modal-title"></h3>
-            <div id="modal-predefined-choices"></div>
-            <input type="text" id="modal-input" placeholder="أو اكتب قيمة مخصصة هنا...">
-            <button id="modal-save-btn" class="primary-btn" data-lang-key="saveBtn">حفظ</button>
-        </div>
-    </div>
-    
+    <!-- Modals (for saving favorites, etc.) -->
     <div id="favorite-name-modal" class="modal">
         <div class="modal-content card">
             <span class="close-btn">&times;</span>
